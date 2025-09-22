@@ -32,14 +32,6 @@ const simulatedVectorDB = [
     {
         content: "How often should I irrigate my fields? Irrigation frequency depends on the crop, soil type, and weather. Sandy soils need more frequent watering than clay soils. A general rule is to check the soil moisture 5-6 inches deep. If it's dry, it's time to irrigate.",
         metadata: { source: 'Water Management Guide.pdf', page: 12 }
-    },
-    {
-        content: "For the vegetative growth stage of most crops, a fertilizer with a higher Nitrogen (N) content is recommended, such as a 20-10-10 NPK mix. This promotes leafy growth. Check your soil analysis for specific deficiencies before applying.",
-        metadata: { source: 'Fertilizer Application Guide.pdf', page: 9 }
-    },
-    {
-        content: "Common monsoon weeds in India include 'Parthenium' (Congress grass) and 'Echinochloa' (barnyard grass). Manual removal before they flower is effective. For chemical control, consult a local expert for a herbicide that is safe for your specific crop.",
-        metadata: { source: 'Weed Management.pdf', page: 4 }
     }
 ];
 

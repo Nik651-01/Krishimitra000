@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, TriangleAlert, CloudDrizzle, Thermometer, Wind, Droplets, MapPin, Loader2 } from "lucide-react";
+import { ArrowRight, TriangleAlert, CloudDrizzle, Thermometer, Wind, Droplets, MapPin, Loader2, WifiOff } from "lucide-react";
 import Link from "next/link";
 import { reasonAboutWeatherAlertRelevance } from "@/ai/flows/reason-weather-alert-relevance";
 import { useLocationStore } from '@/lib/location-store';
 import { getWeatherForecast, WeatherForecast } from '@/ai/flows/get-weather-forecast';
+import { formatDistanceToNow } from 'date-fns';
 
 // This is now a client component, but we can still fetch data on the server
 // for initial render if needed, or fetch on client. For simplicity, we'll keep this as a placeholder.
@@ -62,8 +63,7 @@ function LocationPrompt() {
 }
 
 function WeatherDisplay() {
-    const { location, address } = useLocationStore();
-    const [weather, setWeather] = useState<WeatherForecast | null>(null);
+    const { location, address, weather, setWeather } = useLocationStore();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -79,7 +79,7 @@ function WeatherDisplay() {
                     });
                     setWeather(forecast);
                 } catch (e) {
-                    setError("Could not fetch weather data.");
+                    setError("Could not fetch fresh weather data.");
                     console.error(e);
                 } finally {
                     setLoading(false);
@@ -89,16 +89,28 @@ function WeatherDisplay() {
             }
         }
         fetchWeather();
-    }, [location]);
+    }, [location, setWeather]);
+
+    const isStale = !!error && !!weather;
 
     return (
         <Card className="lg:col-span-2">
             <CardHeader>
-                <CardTitle>Today's Weather</CardTitle>
-                <CardDescription>
-                    {address?.description || 'Current Location'}
-                    {!location && !loading && "Location not available"}
-                </CardDescription>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <CardTitle>Today's Weather</CardTitle>
+                        <CardDescription>
+                            {address?.description || 'Current Location'}
+                            {!location && !loading && " (Location not available)"}
+                        </CardDescription>
+                    </div>
+                    {isStale && (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground p-2 bg-muted rounded-md">
+                            <WifiOff className="w-4 h-4" />
+                            <span>Offline. Last updated {formatDistanceToNow(new Date(weather.fetchedAt!), { addSuffix: true })}</span>
+                        </div>
+                    )}
+                </div>
             </CardHeader>
             <CardContent>
                 {loading && (
@@ -107,8 +119,8 @@ function WeatherDisplay() {
                         <p className="ml-4 text-muted-foreground">Fetching weather...</p>
                     </div>
                 )}
-                {error && <p className="text-destructive">{error}</p>}
-                {weather && !loading && (
+                {error && !weather && <p className="text-destructive h-24 flex items-center">{error} Please check your connection.</p>}
+                {weather && (
                     <div className="flex items-start justify-between">
                         <div className="flex items-center gap-4">
                             <CloudDrizzle className="w-16 h-16 text-primary" />
@@ -133,7 +145,7 @@ function WeatherDisplay() {
                         </div>
                     </div>
                 )}
-                 {!location && !loading && !error && (
+                 {!location && !loading && !weather && (
                     <p className="text-muted-foreground h-24 flex items-center">Share location to see local weather.</p>
                  )}
             </CardContent>

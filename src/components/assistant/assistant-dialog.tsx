@@ -26,8 +26,6 @@ interface Message {
 
 const starterQuestions = [
     "What's the weather forecast?",
-    "Which fertilizer should I use now?",
-    "How do I control new weeds?",
     "Recommend a crop to plant",
 ]
 

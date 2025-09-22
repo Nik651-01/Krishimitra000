@@ -4,10 +4,11 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Sun, Cloud, CloudRain, CloudDrizzle, Thermometer, Droplets, Wind, Sunrise, Sunset, Loader2, CloudSun } from "lucide-react";
+import { Sun, Cloud, CloudRain, CloudDrizzle, Thermometer, Droplets, Wind, Sunrise, Sunset, Loader2, CloudSun, WifiOff } from "lucide-react";
 import { useLocationStore } from '@/lib/location-store';
 import { getWeatherForecast, WeatherForecast } from '@/ai/flows/get-weather-forecast';
 import { cn } from '@/lib/utils';
+import { formatDistanceToNow } from 'date-fns';
 
 const weeklyForecastData = [
     { day: "Tue", icon: CloudRain, high: 28, low: 21, desc: "Heavy Rain" },
@@ -33,8 +34,7 @@ function WeatherIcon({ description, className }: { description: string, classNam
 }
 
 export default function WeatherPage() {
-    const { location, address, initialized } = useLocationStore();
-    const [weather, setWeather] = useState<WeatherForecast | null>(null);
+    const { location, address, initialized, weather, setWeather } = useLocationStore();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +50,7 @@ export default function WeatherPage() {
                     });
                     setWeather(forecast);
                 } catch (e) {
-                    setError("Could not fetch weather data.");
+                    setError("Could not fetch fresh weather data.");
                     console.error(e);
                 } finally {
                     setLoading(false);
@@ -60,7 +60,7 @@ export default function WeatherPage() {
             }
         }
         fetchWeather();
-    }, [location, initialized]);
+    }, [location, initialized, setWeather]);
     
     if (!initialized) {
         return (
@@ -69,6 +69,8 @@ export default function WeatherPage() {
             </div>
         )
     }
+
+    const isStale = !!error && !!weather;
 
     const todayForecast = weather ? 
         { day: "Today", high: weather.tempHigh, low: weather.tempLow, desc: weather.description } :
@@ -91,7 +93,15 @@ export default function WeatherPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Current Conditions</CardTitle>
+                     <div className="flex justify-between items-center">
+                        <CardTitle>Current Conditions</CardTitle>
+                        {isStale && (
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground p-2 bg-muted rounded-md">
+                                <WifiOff className="w-4 h-4" />
+                                <span>Offline. Last updated {formatDistanceToNow(new Date(weather.fetchedAt!), { addSuffix: true })}</span>
+                            </div>
+                        )}
+                    </div>
                 </CardHeader>
                  <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                     {loading && (
@@ -100,11 +110,12 @@ export default function WeatherPage() {
                             <p className="ml-4 text-muted-foreground">Fetching weather for your location...</p>
                         </div>
                     )}
-                    {error && <p className="text-destructive col-span-full">{error}</p>}
-                    {!location && !loading && !error && (
+                    {error && !weather && <p className="text-destructive h-32 flex items-center col-span-full">{error} Please check your connection.</p>}
+
+                    {!location && !loading && !weather && (
                         <p className="text-muted-foreground h-32 flex items-center col-span-full">Share your location on the dashboard to see local weather conditions.</p>
                     )}
-                    {weather && !loading && (
+                    {weather && (
                         <>
                             <div className="flex items-center gap-4 lg:col-span-2">
                                 <WeatherIcon description={weather.description} />

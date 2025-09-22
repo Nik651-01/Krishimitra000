@@ -2,20 +2,28 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { getLocationFromCoords, LocationAddress } from '@/ai/flows/get-location-from-coords';
+import { WeatherForecast } from '@/ai/flows/get-weather-forecast';
+
 
 interface Location {
   latitude: number;
   longitude: number;
 }
 
+type CachedWeatherForecast = WeatherForecast & {
+  fetchedAt: string;
+};
+
 interface LocationState {
   location: Location | null;
   address: LocationAddress | null;
+  weather: CachedWeatherForecast | null;
   loading: boolean;
   error: string | null;
   initialized: boolean;
   requestLocation: () => void;
   setLocation: (location: Location) => void;
+  setWeather: (weather: WeatherForecast) => void;
 }
 
 export const useLocationStore = create<LocationState>()(
@@ -23,10 +31,14 @@ export const useLocationStore = create<LocationState>()(
     (set, get) => ({
       location: null,
       address: null,
+      weather: null,
       loading: false,
       error: null,
       initialized: false, // To check if store has been hydrated from localStorage
       setLocation: (location) => set({ location }),
+      setWeather: (weather) => set({ 
+          weather: { ...weather, fetchedAt: new Date().toISOString() } 
+      }),
       requestLocation: () => {
         if (navigator.geolocation) {
           set({ loading: true, error: null });
