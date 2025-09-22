@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
-import { MapPin, PlusCircle, Edit, Trash2 } from "lucide-react";
+import { fetchMapData } from "@/ai/flows/fetch-map-data";
+import { MapPin, PlusCircle, Edit, Trash2, Globe } from "lucide-react";
 import Image from "next/image";
 
 const fences = [
@@ -25,7 +26,14 @@ const fences = [
     },
 ];
 
-export default function GeofencingPage() {
+export default async function GeofencingPage() {
+
+    const mapData = await fetchMapData({
+        latitude: 19.9975,
+        longitude: 73.7898,
+        zoom: 12
+    });
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-start">
@@ -44,19 +52,22 @@ export default function GeofencingPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Farm Map</CardTitle>
-                    <CardDescription>A visual overview of your geofenced areas.</CardDescription>
+                    <CardDescription>A visual overview of your geofenced areas, ready for Bhuvan API integration.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="relative w-full h-96 bg-muted rounded-md flex items-center justify-center">
                         <Image 
-                            src="https://picsum.photos/seed/farmmap/1200/400"
+                            src={mapData.tileUrl}
                             alt="Farm map with geofenced areas"
                             fill
                             className="object-cover rounded-md"
                             data-ai-hint="farm map"
                         />
                          <div className="absolute inset-0 bg-primary/10 rounded-md"></div>
-                         <p className="z-10 text-muted-foreground font-semibold bg-background/80 px-4 py-2 rounded-full">Map Placeholder</p>
+                         <div className="z-10 text-muted-foreground font-semibold bg-background/80 px-4 py-2 rounded-full flex items-center gap-2">
+                            <Globe className="w-5 h-5" />
+                            <span>Bhuvan API Integration Point</span>
+                         </div>
                     </div>
                 </CardContent>
             </Card>
