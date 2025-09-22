@@ -10,9 +10,8 @@ export const runtime = 'edge';
 export async function POST(req: NextRequest) {
   const {
     messages,
-    flow,
     ...rest
-  }: {messages: Message[]; flow: string; [key: string]: any} = await req.json();
+  }: {messages: Message[]; [key: string]: any} = await req.json();
 
   try {
     const stream = await chat({
