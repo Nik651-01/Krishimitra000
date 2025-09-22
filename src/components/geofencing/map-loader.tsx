@@ -8,10 +8,11 @@ const InteractiveMap = dynamic(
 );
 
 type MapLoaderProps = {
-    onAreaSelect: (areaIdentifier: string) => void;
+    onAreaSelect: (areaIdentifier: string, areaInAcres: number) => void;
+    onFirstVertex: (areaIdentifier: string) => void;
     onClear: () => void;
 }
 
-export function MapLoader({ onAreaSelect, onClear }: MapLoaderProps) {
-    return <InteractiveMap onAreaSelect={onAreaSelect} onClear={onClear} />;
+export function MapLoader({ onAreaSelect, onFirstVertex, onClear }: MapLoaderProps) {
+    return <InteractiveMap onAreaSelect={onAreaSelect} onFirstVertex={onFirstVertex} onClear={onClear} />;
 }

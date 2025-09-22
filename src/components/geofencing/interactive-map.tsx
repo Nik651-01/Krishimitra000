@@ -6,6 +6,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet-draw';
+import 'leaflet-geometryutil';
 import { useLocationStore } from '@/lib/location-store';
 
 // Fix for default icon issue with Leaflet and Webpack
@@ -22,19 +23,19 @@ L.Icon.Default.mergeOptions({
 });
 
 type InteractiveMapProps = {
-  onAreaSelect: (areaIdentifier: string) => void;
+  onAreaSelect: (areaIdentifier: string, areaInAcres: number) => void;
+  onFirstVertex: (areaIdentifier: string) => void;
   onClear: () => void;
 };
 
 
-export default function InteractiveMap({ onAreaSelect, onClear }: InteractiveMapProps) {
+export default function InteractiveMap({ onAreaSelect, onFirstVertex, onClear }: InteractiveMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const drawnItemsRef = useRef<L.FeatureGroup | null>(null);
   const { location, initialized } = useLocationStore();
 
   useEffect(() => {
-    // Initialize map only if the ref is available and map hasn't been initialized yet
     if (mapRef.current && !mapInstance.current && location) {
       mapInstance.current = L.map(mapRef.current, {
         center: [location.latitude, location.longitude],
@@ -65,15 +66,34 @@ export default function InteractiveMap({ onAreaSelect, onClear }: InteractiveMap
       });
       mapInstance.current.addControl(drawControl);
 
+      mapInstance.current.on(L.Draw.Event.DRAWSTART, (e: any) => {
+        if (e.layerType === 'polygon') {
+            drawnItems.clearLayers();
+            onClear();
+
+            const onFirstClick = (clickEvent: L.LeafletMouseEvent) => {
+                const latlng = clickEvent.latlng;
+                const identifier = `${latlng.lat},${latlng.lng}`;
+                onFirstVertex(identifier);
+                mapInstance.current?.off('click', onFirstClick);
+            };
+            mapInstance.current?.on('click', onFirstClick);
+        }
+      });
+
       mapInstance.current.on(L.Draw.Event.CREATED, (e: any) => {
         const layer = e.layer;
         const geoJSON = layer.toGeoJSON();
         const identifier = JSON.stringify(geoJSON.geometry.coordinates);
         
+        // Calculate area
+        const areaMeters = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+        const areaAcres = areaMeters * 0.000247105;
+
         drawnItems.clearLayers();
         drawnItems.addLayer(layer);
         
-        onAreaSelect(identifier);
+        onAreaSelect(identifier, areaAcres);
       });
 
       mapInstance.current.on('draw:deletestart', () => {
@@ -90,7 +110,7 @@ export default function InteractiveMap({ onAreaSelect, onClear }: InteractiveMap
         mapInstance.current = null;
       }
     };
-  }, [location, onAreaSelect, onClear]);
+  }, [location, onAreaSelect, onClear, onFirstVertex]);
 
   if (!initialized) {
     return (

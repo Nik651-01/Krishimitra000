@@ -37,25 +37,44 @@ type GeofenceData = {
 
 export default function GeofencingPage() {
     const { t } = useTranslation();
-    const [loadingData, setLoadingData] = useState(false);
+    const [loadingLulc, setLoadingLulc] = useState(false);
+    const [loadingSoil, setLoadingSoil] = useState(false);
     const [geofenceData, setGeofenceData] = useState<GeofenceData>(null);
+    const [polygonArea, setPolygonArea] = useState<number | null>(null);
 
-    const handleAreaSelect = async (areaIdentifier: string) => {
-        setLoadingData(true);
-        setGeofenceData(null);
+    const handleFirstVertex = async (areaIdentifier: string) => {
+        setLoadingSoil(true);
+        setGeofenceData(prev => ({ ...(prev || { lulcData: '', soilData: '' }), soilData: '' }));
+         try {
+            const data = await getGeofenceData({ areaIdentifier });
+            setGeofenceData(prev => ({...(prev || { lulcData: '' }), soilData: data.soilData }));
+        } catch (error) {
+            console.error("Failed to fetch soil data:", error);
+            setGeofenceData(prev => ({...(prev || { lulcData: '' }), soilData: 'Failed to load data.' }));
+        } finally {
+            setLoadingSoil(false);
+        }
+    }
+
+    const handleAreaSelect = async (areaIdentifier: string, area: number) => {
+        setLoadingLulc(true);
+        setPolygonArea(area);
+        setGeofenceData(prev => ({ ...(prev || { lulcData: '', soilData: '' }), lulcData: '' }));
+
         try {
             const data = await getGeofenceData({ areaIdentifier });
-            setGeofenceData(data);
+            setGeofenceData(prev => ({...(prev || { soilData: '' }), lulcData: data.lulcData }));
         } catch (error) {
-            console.error("Failed to fetch geofence data:", error);
-            // Optionally, set an error state here to show in the UI
+            console.error("Failed to fetch LULC data:", error);
+            setGeofenceData(prev => ({...(prev || { soilData: '' }), lulcData: 'Failed to load data.' }));
         } finally {
-            setLoadingData(false);
+            setLoadingLulc(false);
         }
     };
 
     const handleClear = () => {
         setGeofenceData(null);
+        setPolygonArea(null);
     }
 
     return (
@@ -80,7 +99,12 @@ export default function GeofencingPage() {
                 </CardHeader>
                 <CardContent>
                     <div className="relative w-full h-[500px] bg-muted rounded-md flex items-center justify-center">
-                        <MapLoader onAreaSelect={handleAreaSelect} onClear={handleClear} />
+                        <MapLoader onAreaSelect={handleAreaSelect} onFirstVertex={handleFirstVertex} onClear={handleClear} />
+                         {polygonArea !== null && (
+                            <div className="absolute bottom-4 right-4 bg-background/80 p-2 rounded-md shadow-lg text-sm">
+                                <p><strong>Selected Area:</strong> {polygonArea.toFixed(2)} acres</p>
+                            </div>
+                        )}
                     </div>
                 </CardContent>
             </Card>
@@ -91,14 +115,14 @@ export default function GeofencingPage() {
                         <CardTitle>{t('geofencing.lulcTitle')}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                         {loadingData && (
+                         {loadingLulc && (
                             <div className="flex items-center gap-2 text-muted-foreground">
                                 <Loader2 className="w-4 h-4 animate-spin" />
                                 <span>Loading LULC data...</span>
                             </div>
                          )}
-                         {geofenceData && <p>{geofenceData.lulcData}</p>}
-                         {!loadingData && !geofenceData && (
+                         {geofenceData?.lulcData && <p>{geofenceData.lulcData}</p>}
+                         {!loadingLulc && !geofenceData?.lulcData && (
                             <p className="text-muted-foreground">{t('geofencing.lulcDescription')}</p>
                          )}
                     </CardContent>
@@ -108,14 +132,14 @@ export default function GeofencingPage() {
                         <CardTitle>{t('geofencing.soilTitle')}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {loadingData && (
+                        {loadingSoil && (
                             <div className="flex items-center gap-2 text-muted-foreground">
                                 <Loader2 className="w-4 h-4 animate-spin" />
                                 <span>Loading Soil data...</span>
                             </div>
                          )}
-                         {geofenceData && <p>{geofenceData.soilData}</p>}
-                         {!loadingData && !geofenceData && (
+                         {geofenceData?.soilData && <p>{geofenceData.soilData}</p>}
+                         {!loadingSoil && !geofenceData?.soilData && (
                              <p className="text-muted-foreground">{t('geofencing.soilDescription')}</p>
                          )}
                     </CardContent>

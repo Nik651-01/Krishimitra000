@@ -56,12 +56,14 @@ export async function getCropRecommendations(prevState: CropRecState, formData: 
 const SoilHealthFormSchema = z.object({
     soilData: z.string().min(10, { message: "Please provide more detailed soil data." }),
     location: z.string().min(3, { message: "Please provide a valid location." }),
+    climateData: z.string().optional(),
 });
 
 export type SoilHealthState = {
     errors?: {
         soilData?: string[];
         location?: string[];
+        climateData?: string[];
     };
     message?: string | null;
     data?: Awaited<ReturnType<typeof analyzeSoilHealth>> | null;
@@ -72,6 +74,7 @@ export async function getSoilHealthAnalysis(prevState: SoilHealthState, formData
     const validatedFields = SoilHealthFormSchema.safeParse({
         soilData: formData.get('soilData'),
         location: formData.get('location'),
+        climateData: formData.get('climateData'),
     });
 
     if (!validatedFields.success) {
@@ -82,7 +85,7 @@ export async function getSoilHealthAnalysis(prevState: SoilHealthState, formData
         };
     }
     
-    const climateData = formData.get('climateData')?.toString() || 'Average regional climate conditions for the specified location.';
+    const climateData = validatedFields.data.climateData || 'Average regional climate conditions for the specified location.';
 
     try {
         const result = await analyzeSoilHealth({

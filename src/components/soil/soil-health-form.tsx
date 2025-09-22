@@ -64,12 +64,12 @@ export function SoilHealthForm() {
                             </div>
                              <div className="space-y-2">
                                 <Label htmlFor="climateData">{t('soilHealthPage.form.climateDataLabel')}</Label>
-                                <Textarea
+                                <Input
                                     id="climateData"
                                     name="climateData"
                                     placeholder={t('soilHealthPage.form.climateDataPlaceholder')}
-                                    rows={1}
                                 />
+                                {state.errors?.climateData && <p className="text-sm font-medium text-destructive">{state.errors.climateData[0]}</p>}
                             </div>
                         </div>
                     </CardContent>
