@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -16,17 +17,18 @@ const weeklyForecastData = [
     { day: "Sun", icon: CloudDrizzle, high: 29, low: 22, desc: "Light Showers" },
 ];
 
-function WeatherIcon({ description }: { description: string }) {
+function WeatherIcon({ description, className }: { description: string, className?: string }) {
+    const defaultClass = "w-16 h-16 text-primary";
     if (description.toLowerCase().includes('rain') || description.toLowerCase().includes('drizzle')) {
-        return <CloudDrizzle className="w-16 h-16 text-primary" />;
+        return <CloudDrizzle className={cn(defaultClass, className)} />;
     }
     if (description.toLowerCase().includes('cloud')) {
-        return <Cloud className="w-16 h-16 text-primary" />;
+        return <Cloud className={cn(defaultClass, className)} />;
     }
     if (description.toLowerCase().includes('sun')) {
-        return <Sun className="w-16 h-16 text-primary" />;
+        return <Sun className={cn(defaultClass, className)} />;
     }
-    return <CloudSun className="w-16 h-16 text-primary" />;
+    return <CloudSun className={cn(defaultClass, className)} />;
 }
 
 export default function WeatherPage() {
@@ -68,10 +70,13 @@ export default function WeatherPage() {
     }
 
     const todayForecast = weather ? 
-        { day: "Today", icon: WeatherIcon, high: weather.tempHigh, low: weather.tempLow, desc: weather.description } :
-        { day: "Today", icon: CloudDrizzle, high: 26, low: 22, desc: "Partly Drizzly" };
+        { day: "Today", high: weather.tempHigh, low: weather.tempLow, desc: weather.description } :
+        { day: "Today", high: 26, low: 22, desc: "Partly Drizzly" };
     
-    const forecast = [todayForecast, ...weeklyForecastData];
+    const forecast = [
+        { ...todayForecast, icon: (props: any) => <WeatherIcon {...props} /> }, 
+        ...weeklyForecastData.map(f => ({...f, icon: (props: any) => <f.icon {...props} />  }))
+    ];
 
 
     return (
@@ -87,7 +92,7 @@ export default function WeatherPage() {
                 <CardHeader>
                     <CardTitle>Current Conditions</CardTitle>
                 </CardHeader>
-                <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                 <CardContent>
                     {loading && (
                         <div className="flex items-center justify-center h-32 col-span-full">
                             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -99,50 +104,38 @@ export default function WeatherPage() {
                         <p className="text-muted-foreground h-32 flex items-center col-span-full">Share your location on the dashboard to see local weather conditions.</p>
                     )}
                     {weather && !loading && (
-                        <>
-                            <div className="flex items-center gap-4 lg:col-span-2">
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                            <Card className="flex flex-col items-center justify-center text-center p-4 lg:col-span-2">
                                 <WeatherIcon description={weather.description} />
-                                <div>
-                                    <p className="text-5xl font-bold">{weather.currentTemp}°C</p>
-                                    <p className="text-muted-foreground">{weather.description}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4 text-sm">
+                                <p className="text-5xl font-bold mt-2">{weather.currentTemp}°C</p>
+                                <p className="text-muted-foreground">{weather.description}</p>
+                            </Card>
+                            <Card className="flex flex-col items-center justify-center text-center p-4">
                                 <Thermometer className="w-8 h-8 text-primary" />
-                                <div>
-                                    <p className="font-semibold">High / Low</p>
-                                    <p className="text-2xl font-semibold">{weather.tempHigh}° / {weather.tempLow}°</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4 text-sm">
+                                <p className="font-semibold mt-2">High / Low</p>
+                                <p className="text-2xl font-semibold">{weather.tempHigh}° / {weather.tempLow}°</p>
+                            </Card>
+                            <Card className="flex flex-col items-center justify-center text-center p-4">
                                 <Droplets className="w-8 h-8 text-primary" />
-                                <div>
-                                    <p className="font-semibold">Humidity</p>
-                                    <p className="text-2xl font-semibold">{weather.humidity}%</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4 text-sm">
+                                <p className="font-semibold mt-2">Humidity</p>
+                                <p className="text-2xl font-semibold">{weather.humidity}%</p>
+                            </Card>
+                             <Card className="flex flex-col items-center justify-center text-center p-4">
                                 <Wind className="w-8 h-8 text-primary" />
-                                <div>
-                                    <p className="font-semibold">Wind</p>
-                                    <p className="text-2xl font-semibold">{weather.windSpeed} km/h</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4 text-sm">
+                                <p className="font-semibold mt-2">Wind</p>
+                                <p className="text-2xl font-semibold">{weather.windSpeed} km/h</p>
+                            </Card>
+                            <Card className="flex flex-col items-center justify-center text-center p-4">
                                 <Sunrise className="w-8 h-8 text-amber-500" />
-                                <div>
-                                    <p className="font-semibold">Sunrise</p>
-                                    <p className="text-2xl font-semibold">6:10 AM</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4 text-sm">
+                                <p className="font-semibold mt-2">Sunrise</p>
+                                <p className="text-2xl font-semibold">6:10 AM</p>
+                            </Card>
+                             <Card className="flex flex-col items-center justify-center text-center p-4">
                                 <Sunset className="w-8 h-8 text-orange-500" />
-                                <div>
-                                    <p className="font-semibold">Sunset</p>
-                                    <p className="text-2xl font-semibold">7:05 PM</p>
-                                </div>
-                            </div>
-                        </>
+                                <p className="font-semibold mt-2">Sunset</p>
+                                <p className="text-2xl font-semibold">7:05 PM</p>
+                            </Card>
+                        </div>
                     )}
                 </CardContent>
             </Card>
@@ -167,7 +160,7 @@ export default function WeatherPage() {
                                         <TableCell className="font-medium">{f.day}</TableCell>
                                         <TableCell>
                                             <div className="flex items-center gap-2">
-                                                <f.icon description={f.desc} />
+                                                <f.icon description={f.desc} className="w-6 h-6" />
                                                 <span>{f.desc}</span>
                                             </div>
                                         </TableCell>
@@ -181,4 +174,5 @@ export default function WeatherPage() {
             </Card>
         </div>
     );
-}
+
+    
