@@ -36,14 +36,32 @@ const fetchMapDataFlow = ai.defineFlow(
     outputSchema: FetchMapDataOutputSchema,
   },
   async input => {
-    // This is a placeholder. In a real implementation, you would make a call
-    // to the Bhuvan API here using the input latitude, longitude, and zoom.
-    console.log(`Fetching map data for lat: ${input.latitude}, lon: ${input.longitude}`);
+    const apiKey = process.env.BHUVAN_API_KEY;
+    if (!apiKey) {
+      console.error("Bhuvan API key is not set in environment variables.");
+      // Fallback to placeholder if key is missing
+      return {
+         tileUrl: `https://picsum.photos/seed/farmmap/1200/400`,
+         geofenceData: {
+            message: "API Key not configured. Please set BHUVAN_API_KEY in your .env file."
+         },
+      };
+    }
+
+    // This is a sample Bhuvan WMS URL. You may need to adjust parameters like
+    // LAYERS, BBOX calculations, and WIDTH/HEIGHT for a real implementation.
+    const bboxWidth = 360 / Math.pow(2, input.zoom);
+    const lon1 = input.longitude - bboxWidth / 2;
+    const lon2 = input.longitude + bboxWidth / 2;
+    const lat1 = input.latitude - bboxWidth / 4;
+    const lat2 = input.latitude + bboxWidth / 4;
+
+    const tileUrl = `https://bhuvan-vec1.nrsc.gov.in/bhuvan/gwc/service/wms?LAYERS=shrin&FORMAT=image/png&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG:4326&BBOX=${lon1},${lat1},${lon2},${lat2}&WIDTH=1200&HEIGHT=400&TOKEN=${apiKey}`;
     
     return {
-      tileUrl: `https://picsum.photos/seed/farmmap/1200/400`, // Placeholder image
+      tileUrl: tileUrl,
       geofenceData: {
-        message: "This is placeholder geofence data. Integrate with Bhuvan API to fetch real data."
+        message: "Successfully created Bhuvan API URL. Further integration required for interactive geofencing."
       },
     };
   }
