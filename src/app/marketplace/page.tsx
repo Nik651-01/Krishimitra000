@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
-const indianStates = {
+const indianStates: Record<string, string[]> = {
   "Andaman and Nicobar Islands": ["Nicobars", "North and Middle Andaman", "South Andaman"],
   "Andhra Pradesh": ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Sri Potti Sriramulu Nellore", "Visakhapatnam", "Vizianagaram", "West Godavari", "Y.S.R. Kadapa"],
   "Arunachal Pradesh": ["Anjaw", "Changlang", "Dibang Valley", "East Kameng", "East Siang", "Kamle", "Kra Daadi", "Kurung Kumey", "Lepa Rada", "Lohit", "Longding", "Lower Dibang Valley", "Lower Siang", "Lower Subansiri", "Namsai", "Pakke Kessang", "Papum Pare", "Shi Yomi", "Siang", "Tawang", "Tirap", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang"],
@@ -73,38 +73,33 @@ export default function MarketplacePage() {
     const [districts, setDistricts] = useState<string[]>([]);
     const [selectedState, setSelectedState] = useState<string | null>(null);
     const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        async function fetchMarketData() {
-            try {
-                setLoading(true);
-                const data = await getMarketPrices();
-                setMarketData(data.records);
-                setFilteredMarketData(data.records);
-            } catch (e) {
-                setError("Failed to fetch market data. Please try again later.");
-                console.error(e);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchMarketData();
-    }, []);
-
-    const handleStateChange = (state: string) => {
+    const handleStateChange = async (state: string) => {
         setSelectedState(state);
         setSelectedDistrict(null);
+        setFilteredMarketData([]);
         setDistricts(indianStates[state as keyof typeof indianStates] || []);
-        const filtered = marketData.filter(record => record.state === state);
-        setFilteredMarketData(filtered);
+        
+        try {
+            setLoading(true);
+            setError(null);
+            const data = await getMarketPrices({ state });
+            setMarketData(data.records);
+            setFilteredMarketData(data.records);
+        } catch (e) {
+            setError("Failed to fetch market data. Please try again later.");
+            console.error(e);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleDistrictChange = (district: string) => {
         setSelectedDistrict(district);
         if (selectedState) {
-             const filtered = marketData.filter(record => record.state === selectedState && record.district === district);
+             const filtered = marketData.filter(record => record.district === district);
             setFilteredMarketData(filtered);
         }
     };
@@ -161,8 +156,8 @@ export default function MarketplacePage() {
                     <Card>
                         <CardHeader>
                             <CardTitle>Live Market Prices</CardTitle>
-                            <CardDescription>
-                                Latest prices for various crops sold across different markets.
+                             <CardDescription>
+                                {selectedState ? `Latest prices for ${selectedDistrict || selectedState}` : "Select a state to see prices."}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -183,6 +178,13 @@ export default function MarketplacePage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
+                                        {filteredMarketData.length === 0 && selectedState && (
+                                            <TableRow>
+                                                <TableCell colSpan={3} className="text-center text-muted-foreground">
+                                                    No recent market data available for the selected area.
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
                                         {filteredMarketData.map((item, index) => (
                                             <TableRow key={index}>
                                                 <TableCell>
