@@ -96,7 +96,7 @@ function WeatherDisplay() {
             <CardHeader>
                 <CardTitle>Today's Weather</CardTitle>
                 <CardDescription>
-                    {address ? address.description : location && `Lat: ${location.latitude.toFixed(2)}, Lon: ${location.longitude.toFixed(2)}`}
+                    {address?.description || 'Current Location'}
                     {!location && !loading && "Location not available"}
                 </CardDescription>
             </CardHeader>

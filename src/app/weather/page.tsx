@@ -79,7 +79,7 @@ export default function WeatherPage() {
             <div>
                 <h1 className="text-3xl font-bold font-headline">Weather Forecast</h1>
                 <p className="text-muted-foreground">
-                    {address ? `7-day forecast for ${address.description}` : location ? `7-day forecast for your location (Lat: ${location.latitude.toFixed(2)}, Lon: ${location.longitude.toFixed(2)})` : "7-day forecast. Share your location for local weather."}
+                    {address ? `7-day forecast for ${address.description}` : "7-day forecast. Share your location for local weather."}
                 </p>
             </div>
 
