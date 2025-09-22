@@ -5,14 +5,14 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 export type Language = 'en' | 'hi' | 'nag' | 'sat' | 'kru' | 'mun';
 
 interface LanguageState {
-  language: Language;
+  language: Language | null;
   setLanguage: (language: Language) => void;
 }
 
 export const useLanguageStore = create<LanguageState>()(
   persist(
     (set) => ({
-      language: 'hi',
+      language: null,
       setLanguage: (language: Language) => set({ language }),
     }),
     {

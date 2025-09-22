@@ -155,7 +155,7 @@
         "lulcTitle": "Bhuvan LULC Data",
         "lulcDescription": "Draw a polygon on the map to get Land Use Land Cover data for that area.",
         "soilTitle": "SoilGrids Data",
-        "soilDescription": "Draw a polygon on the map to get SoilGrids data for that area.",
+        "soilDescription": "Click on the map to get SoilGrids data for a specific point.",
         "definedFences": "Defined Fences",
         "currentCrop": "Current Crop"
     },

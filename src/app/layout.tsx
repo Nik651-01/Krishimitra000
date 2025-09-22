@@ -28,6 +28,36 @@ export default function RootLayout({
     setIsHydrated(true);
   }, []);
 
+  if (!isHydrated) {
+     return (
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <title>KrishiMitra</title>
+          <meta name="description" content="A smart agri-advisor for Indian farmers." />
+        </head>
+        <body>
+          <div className="flex justify-center items-center h-screen">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        </body>
+      </html>
+    );
+  }
+
+  if (!language) {
+    return (
+       <html lang="en" suppressHydrationWarning>
+         <head>
+          <title>KrishiMitra</title>
+          <meta name="description" content="A smart agri-advisor for Indian farmers." />
+         </head>
+         <body>
+          <LanguageSelector />
+         </body>
+       </html>
+    )
+  }
+
   return (
     <html lang={language} suppressHydrationWarning>
       <head>
@@ -40,17 +70,11 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
       </head>
       <body className="font-body antialiased">
-        {!isHydrated ? (
-          <div className="flex justify-center items-center h-screen">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        ) : (
           <TranslationProvider>
             <AppShell>
               {children}
             </AppShell>
           </TranslationProvider>
-        )}
         <Toaster />
       </body>
     </html>

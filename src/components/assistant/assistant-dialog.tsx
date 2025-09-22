@@ -241,13 +241,13 @@ export function AssistantDialog({children}: {children: ReactNode}) {
           {messages.length === 0 && !isLoading && (
             <div className="mb-4">
                 <p className="text-sm text-muted-foreground mb-2">{t('assistant.starterQuestions')}</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-2 gap-2">
                     {starterQuestions.map((q) => (
                         <Button 
                             key={q} 
                             variant="outline" 
                             size="sm" 
-                            className="text-xs h-auto py-1 px-2"
+                            className="text-xs h-auto py-1 px-2 whitespace-normal text-left justify-start"
                             onClick={() => handleSubmit(q)}
                             disabled={isLoading}
                         >

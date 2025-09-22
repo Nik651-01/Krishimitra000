@@ -99,8 +99,12 @@ export default function MarketplacePage() {
             // Auto-select latest date with data
             if (data.records.length > 0) {
                 const latestDate = data.records.reduce((latest, record) => {
-                    const recordDate = parse(record.arrival_date, 'dd/MM/yyyy', new Date());
-                    return recordDate > latest ? recordDate : latest;
+                    try {
+                        const recordDate = parse(record.arrival_date, 'dd/MM/yyyy', new Date());
+                        return recordDate > latest ? recordDate : latest;
+                    } catch {
+                        return latest;
+                    }
                 }, new Date(0));
                 setSelectedDate(latestDate);
             } else {
