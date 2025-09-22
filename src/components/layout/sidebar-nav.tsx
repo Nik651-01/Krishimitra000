@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Leaf, TestTube2, CloudSun, BookOpen, MapPin } from 'lucide-react';
+import { Home, Leaf, TestTube2, CloudSun, BookOpen, MapPin, ShoppingCart } from 'lucide-react';
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
     { href: '/weather', icon: CloudSun, label: 'Weather' },
     { href: '/advisories', icon: BookOpen, label: 'Advisory Services' },
     { href: '/geofencing', icon: MapPin, label: 'Geofencing' },
+    { href: '/marketplace', icon: ShoppingCart, label: 'Marketplace' },
 ];
 
 export function SidebarNav() {
