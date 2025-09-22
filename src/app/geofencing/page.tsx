@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
-import { fetchMapData } from "@/ai/flows/fetch-map-data";
-import { MapPin, PlusCircle, Edit, Trash2, Globe } from "lucide-react";
-import Image from "next/image";
-import dynamic from "next/dynamic";
+import { MapPin, PlusCircle, Edit, Trash2 } from "lucide-react";
+import { MapLoader } from "@/components/geofencing/map-loader";
 
 const fences = [
     {
@@ -26,10 +24,6 @@ const fences = [
         crop: 'N/A',
     },
 ];
-
-// Dynamically import the map component to ensure it's only loaded on the client side
-const InteractiveMap = dynamic(() => import('@/components/geofencing/interactive-map'), { ssr: false });
-
 
 export default function GeofencingPage() {
 
@@ -55,7 +49,7 @@ export default function GeofencingPage() {
                 </CardHeader>
                 <CardContent>
                     <div className="relative w-full h-[500px] bg-muted rounded-md flex items-center justify-center">
-                        <InteractiveMap />
+                        <MapLoader />
                     </div>
                 </CardContent>
             </Card>
