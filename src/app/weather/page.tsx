@@ -96,7 +96,12 @@ export default function WeatherPage() {
             <Card>
                 <CardHeader>
                      <div className="flex justify-between items-center">
-                        <CardTitle>{t('weatherPage.currentConditions')}</CardTitle>
+                        <div>
+                            <CardTitle>{t('weatherPage.currentConditions')}</CardTitle>
+                            <CardDescription>
+                                {address?.description || t('dashboard.weather.locationNotAvailable')}
+                            </CardDescription>
+                        </div>
                         {isStale && (
                             <div className="flex items-center gap-2 text-xs text-muted-foreground p-2 bg-muted rounded-md">
                                 <WifiOff className="w-4 h-4" />
@@ -131,6 +136,7 @@ export default function WeatherPage() {
                                     <Thermometer className="w-6 h-6 text-muted-foreground" />
                                     <div>
                                         <p className="text-sm text-muted-foreground">{t('dashboard.weather.tempHighLow')}</p>
+
                                         <p className="font-semibold">{weather.tempHigh}° / {weather.tempLow}°</p>
                                     </div>
                                 </div>
