@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import {
@@ -55,6 +56,9 @@ export function AssistantDialog() {
     recognition.onend = () => setIsListening(false);
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
+      if (event.error === 'not-allowed') {
+        setError('Microphone access denied. Please enable it in your browser settings.');
+      }
       setIsListening(false);
     };
 
@@ -73,6 +77,7 @@ export function AssistantDialog() {
     if (isListening) {
       recognitionRef.current?.stop();
     } else {
+      setError(null); // Clear previous errors
       recognitionRef.current?.start();
     }
   };
