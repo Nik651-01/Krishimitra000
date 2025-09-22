@@ -4,6 +4,7 @@ import { List, ListItem } from "@/components/ui/list";
 import { fetchMapData } from "@/ai/flows/fetch-map-data";
 import { MapPin, PlusCircle, Edit, Trash2, Globe } from "lucide-react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
 const fences = [
     {
@@ -26,13 +27,11 @@ const fences = [
     },
 ];
 
-export default async function GeofencingPage() {
+// Dynamically import the map component to ensure it's only loaded on the client side
+const InteractiveMap = dynamic(() => import('@/components/geofencing/interactive-map'), { ssr: false });
 
-    const mapData = await fetchMapData({
-        latitude: 19.9975,
-        longitude: 73.7898,
-        zoom: 12
-    });
+
+export default function GeofencingPage() {
 
     return (
         <div className="space-y-6">
@@ -40,7 +39,7 @@ export default async function GeofencingPage() {
                 <div>
                     <h1 className="text-3xl font-bold font-headline">Geofencing</h1>
                     <p className="text-muted-foreground">
-                        Define and manage virtual boundaries for your farm areas.
+                        Define and manage virtual boundaries for your farm areas. Draw a polygon to analyze an area.
                     </p>
                 </div>
                 <Button>
@@ -51,26 +50,38 @@ export default async function GeofencingPage() {
             
             <Card>
                 <CardHeader>
-                    <CardTitle>Farm Map</CardTitle>
-                    <CardDescription>A visual overview of your geofenced areas, ready for Bhuvan API integration.</CardDescription>
+                    <CardTitle>Interactive Farm Map</CardTitle>
+                    <CardDescription>A visual overview of your farm. Use the tools on the left to draw a new geofenced area.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="relative w-full h-96 bg-muted rounded-md flex items-center justify-center">
-                        <Image 
-                            src={mapData.tileUrl}
-                            alt="Farm map with geofenced areas"
-                            fill
-                            className="object-cover rounded-md"
-                            data-ai-hint="farm map"
-                        />
-                         <div className="absolute inset-0 bg-primary/10 rounded-md"></div>
-                         <div className="z-10 text-muted-foreground font-semibold bg-background/80 px-4 py-2 rounded-full flex items-center gap-2">
-                            <Globe className="w-5 h-5" />
-                            <span>Bhuvan API Integration Point</span>
-                         </div>
+                    <div className="relative w-full h-[500px] bg-muted rounded-md flex items-center justify-center">
+                        <InteractiveMap />
                     </div>
                 </CardContent>
             </Card>
+
+            <div className="grid md:grid-cols-2 gap-6">
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Bhuvan LULC Data</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div id="lulc-data">
+                            <p className="text-muted-foreground">Draw a polygon on the map to get Land Use Land Cover data for that area.</p>
+                        </div>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>SoilGrids Data</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div id="soil-data">
+                             <p className="text-muted-foreground">Draw a polygon on the map to get SoilGrids data for that area.</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
 
             <Card>
                 <CardHeader>
