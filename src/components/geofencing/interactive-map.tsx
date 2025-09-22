@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
+import 'leaflet-draw';
 
 // Fix for default icon issue with Leaflet and Webpack
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
