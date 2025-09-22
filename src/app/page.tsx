@@ -62,7 +62,7 @@ function LocationPrompt() {
 }
 
 function WeatherDisplay() {
-    const { location } = useLocationStore();
+    const { location, address } = useLocationStore();
     const [weather, setWeather] = useState<WeatherForecast | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -96,7 +96,7 @@ function WeatherDisplay() {
             <CardHeader>
                 <CardTitle>Today's Weather</CardTitle>
                 <CardDescription>
-                    {location && `Lat: ${location.latitude.toFixed(2)}, Lon: ${location.longitude.toFixed(2)}`}
+                    {address ? address.description : location && `Lat: ${location.latitude.toFixed(2)}, Lon: ${location.longitude.toFixed(2)}`}
                     {!location && !loading && "Location not available"}
                 </CardDescription>
             </CardHeader>

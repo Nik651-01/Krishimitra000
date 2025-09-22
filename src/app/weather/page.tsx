@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Sun, Cloud, CloudRain, CloudDrizzle, Thermometer, Droplets, Wind, Sunrise, Sunset, Loader2 } from "lucide-react";
+import { Sun, Cloud, CloudRain, CloudDrizzle, Thermometer, Droplets, Wind, Sunrise, Sunset, Loader2, CloudSun } from "lucide-react";
 import { useLocationStore } from '@/lib/location-store';
 import { getWeatherForecast, WeatherForecast } from '@/ai/flows/get-weather-forecast';
 
@@ -30,7 +30,7 @@ function WeatherIcon({ description }: { description: string }) {
 }
 
 export default function WeatherPage() {
-    const { location, initialized } = useLocationStore();
+    const { location, address, initialized } = useLocationStore();
     const [weather, setWeather] = useState<WeatherForecast | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -79,7 +79,7 @@ export default function WeatherPage() {
             <div>
                 <h1 className="text-3xl font-bold font-headline">Weather Forecast</h1>
                 <p className="text-muted-foreground">
-                    {location ? `7-day forecast for your location (Lat: ${location.latitude.toFixed(2)}, Lon: ${location.longitude.toFixed(2)})` : "7-day forecast. Share your location for local weather."}
+                    {address ? `7-day forecast for ${address.description}` : location ? `7-day forecast for your location (Lat: ${location.latitude.toFixed(2)}, Lon: ${location.longitude.toFixed(2)})` : "7-day forecast. Share your location for local weather."}
                 </p>
             </div>
 

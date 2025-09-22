@@ -1,6 +1,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { getLocationFromCoords, LocationAddress } from '@/ai/flows/get-location-from-coords';
 
 interface Location {
   latitude: number;
@@ -9,6 +10,7 @@ interface Location {
 
 interface LocationState {
   location: Location | null;
+  address: LocationAddress | null;
   loading: boolean;
   error: string | null;
   initialized: boolean;
@@ -20,6 +22,7 @@ export const useLocationStore = create<LocationState>()(
   persist(
     (set, get) => ({
       location: null,
+      address: null,
       loading: false,
       error: null,
       initialized: false, // To check if store has been hydrated from localStorage
@@ -28,9 +31,18 @@ export const useLocationStore = create<LocationState>()(
         if (navigator.geolocation) {
           set({ loading: true, error: null });
           navigator.geolocation.getCurrentPosition(
-            (position) => {
+            async (position) => {
               const { latitude, longitude } = position.coords;
-              set({ location: { latitude, longitude }, loading: false });
+              const location = { latitude, longitude };
+              set({ location, loading: false });
+
+              try {
+                const address = await getLocationFromCoords(location);
+                set({ address });
+              } catch (e) {
+                console.error("Failed to get address from coordinates", e);
+                // We can still proceed without the address
+              }
             },
             (error) => {
               let errorMessage = "An unknown error occurred.";
