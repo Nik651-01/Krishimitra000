@@ -13,6 +13,7 @@ import {z} from 'genkit';
 const PersonalizedCropRecommendationsInputSchema = z.object({
   soilData: z
     .string()
+    .optional()
     .describe('Detailed soil composition data including pH, NPK values, and organic matter content.'),
   climateData: z
     .string()
@@ -53,8 +54,11 @@ const prompt = ai.definePrompt({
   input: {schema: PersonalizedCropRecommendationsInputSchema},
   output: {schema: PersonalizedCropRecommendationsOutputSchema},
   prompt: `You are an expert agricultural advisor. Based on the provided soil data, climate conditions, and farm location, recommend the most suitable crops for the farmer.
-
+  {{#if soilData}}
   Soil Data: {{{soilData}}}
+  {{else}}
+  No soil data provided. You must ask the user for their soil data before you can provide a crop recommendation.
+  {{/if}}
   Climate Data: {{{climateData}}}
   Location: {{{location}}}
 

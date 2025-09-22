@@ -13,6 +13,7 @@ import {z} from 'genkit';
 const AnalyzeSoilHealthInputSchema = z.object({
   soilData: z
     .string()
+    .optional()
     .describe('Detailed soil composition data including pH, NPK values, and organic matter content.'),
   climateData: z
     .string()
@@ -47,8 +48,11 @@ const prompt = ai.definePrompt({
   input: {schema: AnalyzeSoilHealthInputSchema},
   output: {schema: AnalyzeSoilHealthOutputSchema},
   prompt: `You are an expert soil scientist. Analyze the provided soil data and location to generate a comprehensive soil health report.
-
+  {{#if soilData}}
   Soil Data: {{{soilData}}}
+  {{else}}
+  No soil data provided. You must ask the user for their soil data before you can provide a soil health analysis.
+  {{/if}}
   Location: {{{location}}}
   Climate Context: {{{climateData}}}
 

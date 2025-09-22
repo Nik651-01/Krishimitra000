@@ -30,7 +30,7 @@ export const analyzeSoilHealthTool = ai.defineTool(
     name: 'analyzeSoilHealth',
     description: 'Analyze soil data to provide a health score and recommendations. Requires detailed soil data.',
     inputSchema: z.object({
-        soilData: z.string().describe('Detailed soil composition data including pH, NPK values, and organic matter content.'),
+        soilData: z.string().optional().describe('Detailed soil composition data including pH, NPK values, and organic matter content.'),
         climateData: z.string().describe('Local climate conditions. Can be general, like "Average regional climate".'),
         location: z.string().describe('The geographical location of the farm.'),
     }),
@@ -44,7 +44,7 @@ export const getPersonalizedCropRecommendationsTool = ai.defineTool(
         name: 'getPersonalizedCropRecommendations',
         description: 'Provide personalized crop recommendations based on soil, climate, and location.',
         inputSchema: z.object({
-            soilData: z.string().describe('Detailed soil composition data including pH, NPK values, and organic matter content.'),
+            soilData: z.string().optional().describe('Detailed soil composition data including pH, NPK values, and organic matter content.'),
             climateData: z.string().describe('Local climate conditions including average rainfall, temperature range, and sunlight hours.'),
             location: z.string().describe('The geographical location of the farm.'),
         }),
