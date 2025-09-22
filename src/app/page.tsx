@@ -13,7 +13,7 @@ import { useLocationStore } from '@/lib/location-store';
 // This is now a client component, but we can still fetch data on the server
 // for initial render if needed, or fetch on client. For simplicity, we'll keep this as a placeholder.
 // In a real app, this would be a server component that fetches and passes data to a client component.
-async function WeatherAlert() {
+function WeatherAlert() {
     // const relevance = await reasonAboutWeatherAlertRelevance({
     //     weatherData: "Alert: Heavy rainfall (80mm) expected in the next 24 hours in your area.",
     //     cropInformation: "Currently growing Grapes, post-harvest stage.",
