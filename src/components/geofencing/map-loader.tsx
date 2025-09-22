@@ -1,10 +1,13 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-
-// Dynamically import the map component to ensure it's only loaded on the client side
-const InteractiveMap = dynamic(() => import('@/components/geofencing/interactive-map'), { ssr: false });
+import { useMemo } from 'react';
 
 export function MapLoader() {
+    const InteractiveMap = useMemo(() => dynamic(
+        () => import('@/components/geofencing/interactive-map'),
+        { ssr: false }
+    ), []);
+
     return <InteractiveMap />;
 }
