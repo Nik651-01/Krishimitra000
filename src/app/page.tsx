@@ -1,14 +1,15 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, TriangleAlert, CloudDrizzle, Thermometer, Wind, Droplets, MapPin } from "lucide-react";
+import { ArrowRight, TriangleAlert, CloudDrizzle, Thermometer, Wind, Droplets, MapPin, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { reasonAboutWeatherAlertRelevance } from "@/ai/flows/reason-weather-alert-relevance";
 import { useLocationStore } from '@/lib/location-store';
+import { getWeatherForecast, WeatherForecast } from '@/ai/flows/get-weather-forecast';
 
 // This is now a client component, but we can still fetch data on the server
 // for initial render if needed, or fetch on client. For simplicity, we'll keep this as a placeholder.
@@ -60,13 +61,97 @@ function LocationPrompt() {
     );
 }
 
+function WeatherDisplay() {
+    const { location } = useLocationStore();
+    const [weather, setWeather] = useState<WeatherForecast | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchWeather() {
+            if (location) {
+                setLoading(true);
+                setError(null);
+                try {
+                    const forecast = await getWeatherForecast({ 
+                        latitude: location.latitude, 
+                        longitude: location.longitude 
+                    });
+                    setWeather(forecast);
+                } catch (e) {
+                    setError("Could not fetch weather data.");
+                    console.error(e);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                setLoading(false);
+            }
+        }
+        fetchWeather();
+    }, [location]);
+
+    return (
+        <Card className="lg:col-span-2">
+            <CardHeader>
+                <CardTitle>Today's Weather</CardTitle>
+                <CardDescription>
+                    {location && `Lat: ${location.latitude.toFixed(2)}, Lon: ${location.longitude.toFixed(2)}`}
+                    {!location && !loading && "Location not available"}
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                {loading && (
+                    <div className="flex items-center justify-center h-24">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        <p className="ml-4 text-muted-foreground">Fetching weather...</p>
+                    </div>
+                )}
+                {error && <p className="text-destructive">{error}</p>}
+                {weather && !loading && (
+                    <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-4">
+                            <CloudDrizzle className="w-16 h-16 text-primary" />
+                            <div>
+                                <p className="text-5xl font-bold">{weather.currentTemp}°C</p>
+                                <p className="text-muted-foreground">{weather.description}</p>
+                            </div>
+                        </div>
+                        <div className="space-y-2 text-right">
+                            <div className="flex items-center gap-2 justify-end">
+                                <p className="text-sm">{weather.tempHigh}° / {weather.tempLow}°</p>
+                                <Thermometer className="w-4 h-4 text-muted-foreground" />
+                            </div>
+                            <div className="flex items-center gap-2 justify-end">
+                                <p className="text-sm">Humidity {weather.humidity}%</p>
+                                <Droplets className="w-4 h-4 text-muted-foreground" />
+                            </div>
+                            <div className="flex items-center gap-2 justify-end">
+                                <p className="text-sm">Wind {weather.windSpeed} km/h</p>
+                                <Wind className="w-4 h-4 text-muted-foreground" />
+                            </div>
+                        </div>
+                    </div>
+                )}
+                 {!location && !loading && !error && (
+                    <p className="text-muted-foreground h-24 flex items-center">Share location to see local weather.</p>
+                 )}
+            </CardContent>
+        </Card>
+    );
+}
+
 
 export default function DashboardPage() {
-    const { location, loading, initialized } = useLocationStore();
+    const { location, initialized } = useLocationStore();
 
     // The store initializes from localStorage, we wait until it's ready.
     if (!initialized) {
-        return null; // Or a loading spinner
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+        );
     }
 
     return (
@@ -79,41 +164,7 @@ export default function DashboardPage() {
             <LocationPrompt />
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>Today's Weather</CardTitle>
-                        <CardDescription>
-                            {loading && "Fetching location..."}
-                            {location && `Lat: ${location.latitude.toFixed(2)}, Lon: ${location.longitude.toFixed(2)}`}
-                            {!location && !loading && "Location not available"}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex items-start justify-between">
-                            <div className="flex items-center gap-4">
-                                <CloudDrizzle className="w-16 h-16 text-primary" />
-                                <div>
-                                    <p className="text-5xl font-bold">26°C</p>
-                                    <p className="text-muted-foreground">Partly Drizzly</p>
-                                </div>
-                            </div>
-                            <div className="space-y-2 text-right">
-                                <div className="flex items-center gap-2 justify-end">
-                                    <p className="text-sm">31° / 22°</p>
-                                    <Thermometer className="w-4 h-4 text-muted-foreground" />
-                                </div>
-                                <div className="flex items-center gap-2 justify-end">
-                                    <p className="text-sm">Humidity 85%</p>
-                                    <Droplets className="w-4 h-4 text-muted-foreground" />
-                                </div>
-                                <div className="flex items-center gap-2 justify-end">
-                                    <p className="text-sm">Wind 12 km/h</p>
-                                    <Wind className="w-4 h-4 text-muted-foreground" />
-                                </div>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                <WeatherDisplay />
                 
                 <Card>
                     <CardHeader>
