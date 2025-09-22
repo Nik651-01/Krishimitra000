@@ -173,6 +173,7 @@ export default function MarketplacePage() {
                                     <SelectValue placeholder="Select a district" />
                                 </SelectTrigger>
                                 <SelectContent>
+                                    <SelectItem value="All">All Districts</SelectItem>
                                     {districts.map(district => (
                                         <SelectItem key={district} value={district}>{district}</SelectItem>
                                     ))}
@@ -193,7 +194,7 @@ export default function MarketplacePage() {
                         <CardHeader>
                             <CardTitle>Live Market Prices</CardTitle>
                              <CardDescription>
-                                {selectedState ? `Showing data for ${selectedDistrict || selectedState} on ${selectedDate ? format(selectedDate, 'PPP') : 'latest date'}` : "Select a state to see prices."}
+                                {selectedState ? `Showing data for ${selectedDistrict && selectedDistrict !== 'All' ? selectedDistrict : selectedState} on ${selectedDate ? format(selectedDate, 'PPP') : 'latest date'}` : "Select a state to see prices."}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>

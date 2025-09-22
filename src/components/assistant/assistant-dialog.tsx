@@ -110,6 +110,8 @@ export function AssistantDialog({children}: {children: ReactNode}) {
     event?.preventDefault();
     if (!input.trim() || isLoading) return;
 
+    stopAudio();
+
     const userMessage: Message = {
       id: Date.now(),
       type: 'user',

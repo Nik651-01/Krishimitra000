@@ -24,7 +24,7 @@ L.Icon.Default.mergeOptions({
 export default function InteractiveMap() {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
-  const { location } = useLocationStore();
+  const { location, initialized } = useLocationStore();
 
   useEffect(() => {
     // Initialize map only if the ref is available and map hasn't been initialized yet
@@ -113,6 +113,14 @@ export default function InteractiveMap() {
       }
     };
   }, [location]);
+
+  if (!initialized) {
+    return (
+        <div className="flex items-center justify-center h-full">
+            <p className="text-muted-foreground">Initializing...</p>
+        </div>
+    )
+  }
 
   if (!location) {
     return (
