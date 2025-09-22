@@ -7,6 +7,8 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { getMarketPrices, MarketPriceRecord } from "@/ai/flows/get-market-prices";
 import { Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 const priceTrendData = [
   { date: "Jan", price: 2200 },
@@ -26,6 +28,11 @@ const chartConfig = {
 
 export default function MarketplacePage() {
     const [marketData, setMarketData] = useState<MarketPriceRecord[]>([]);
+    const [filteredMarketData, setFilteredMarketData] = useState<MarketPriceRecord[]>([]);
+    const [states, setStates] = useState<string[]>([]);
+    const [districts, setDistricts] = useState<string[]>([]);
+    const [selectedState, setSelectedState] = useState<string | null>(null);
+    const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -35,6 +42,9 @@ export default function MarketplacePage() {
                 setLoading(true);
                 const data = await getMarketPrices();
                 setMarketData(data.records);
+                setFilteredMarketData(data.records);
+                const uniqueStates = [...new Set(data.records.map(record => record.state))];
+                setStates(uniqueStates);
             } catch (e) {
                 setError("Failed to fetch market data. Please try again later.");
                 console.error(e);
@@ -45,6 +55,22 @@ export default function MarketplacePage() {
         fetchMarketData();
     }, []);
 
+    const handleStateChange = (state: string) => {
+        setSelectedState(state);
+        setSelectedDistrict(null);
+        const stateDistricts = [...new Set(marketData.filter(record => record.state === state).map(record => record.district))];
+        setDistricts(stateDistricts);
+        setFilteredMarketData(marketData.filter(record => record.state === state));
+    };
+
+    const handleDistrictChange = (district: string) => {
+        setSelectedDistrict(district);
+        if (selectedState) {
+            setFilteredMarketData(marketData.filter(record => record.state === selectedState && record.district === district));
+        }
+    };
+
+
     return (
         <div className="space-y-6">
             <div>
@@ -53,6 +79,43 @@ export default function MarketplacePage() {
                     View live agricultural market rates from various APMCs across India.
                 </p>
             </div>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Filter Markets</CardTitle>
+                    <CardDescription>Select a state and district to narrow down results.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="state-select">State</Label>
+                            <Select onValueChange={handleStateChange} value={selectedState || ""}>
+                                <SelectTrigger id="state-select">
+                                    <SelectValue placeholder="Select a state" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {states.map(state => (
+                                        <SelectItem key={state} value={state}>{state}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                             <Label htmlFor="district-select">District</Label>
+                            <Select onValueChange={handleDistrictChange} value={selectedDistrict || ""} disabled={!selectedState}>
+                                <SelectTrigger id="district-select">
+                                    <SelectValue placeholder="Select a district" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {districts.map(district => (
+                                        <SelectItem key={district} value={district}>{district}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
 
             <div className="grid gap-6 lg:grid-cols-3">
                 <div className="lg:col-span-2">
@@ -81,7 +144,7 @@ export default function MarketplacePage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {marketData.map((item, index) => (
+                                        {filteredMarketData.map((item, index) => (
                                             <TableRow key={index}>
                                                 <TableCell>
                                                     <div className="font-medium">{item.commodity}</div>
