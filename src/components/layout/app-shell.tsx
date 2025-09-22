@@ -3,10 +3,11 @@ import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarInset, 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bell, Mic, Search, Tractor } from "lucide-react";
+import { Bell, Search, Tractor } from "lucide-react";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarNav } from "./sidebar-nav";
+import { Assistant } from "@/components/assistant/assistant";
 
 export async function AppShell({ children }: { children: React.ReactNode }) {
     return (
@@ -42,10 +43,7 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon">
-                            <Mic className="h-5 w-5" />
-                            <span className="sr-only">Voice Commands</span>
-                        </Button>
+                        <Assistant />
                         <Button variant="ghost" size="icon">
                             <Bell className="h-5 w-5" />
                              <span className="sr-only">Notifications</span>
