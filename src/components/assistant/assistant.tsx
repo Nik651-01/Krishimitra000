@@ -1,6 +1,6 @@
 'use client';
 
-import { useCompletion } from 'ai/react';
+import { useChat } from 'ai/react';
 import { Bot, Mic, User } from 'lucide-react';
 import { FormEvent, useRef } from 'react';
 
@@ -15,29 +15,25 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { chatAssistant } from '@/ai/flows/chat-assistant';
 
 export function Assistant() {
   const {
-    completion,
+    messages,
     input,
     handleInputChange,
     handleSubmit: originalHandleSubmit,
     error,
-  } = useCompletion({
+  } = useChat({
     api: '/api/chat',
+    body: {
+        flow: 'chatAssistant',
+    }
   });
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    originalHandleSubmit(e, {
-      options: {
-        body: {
-          flow: 'chatAssistant',
-        },
-      },
-    });
+    originalHandleSubmit(e);
   };
 
   return (
@@ -68,18 +64,18 @@ export function Assistant() {
               </div>
             </div>
 
-            {completion && (
-              <div className="flex items-start gap-4">
-                <Avatar className="w-8 h-8 border">
-                  <AvatarFallback>
-                    <Bot />
-                  </AvatarFallback>
-                </Avatar>
-                <div className="text-sm rounded-md bg-muted/50 p-3">
-                  {completion}
+            {messages.map((m) => (
+                <div key={m.id} className="flex items-start gap-4">
+                    <Avatar className="w-8 h-8 border">
+                        <AvatarFallback>
+                        {m.role === 'user' ? <User /> : <Bot />}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="text-sm rounded-md bg-muted/50 p-3">
+                        {m.content}
+                    </div>
                 </div>
-              </div>
-            )}
+            ))}
             {error && <div className="text-red-500">{error.message}</div>}
           </div>
           <form
