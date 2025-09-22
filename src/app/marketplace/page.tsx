@@ -1,18 +1,12 @@
-
+'use client';
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
-const marketData = [
-    { crop: "Wheat", variety: "Lokwan", market: "Nashik APMC", quantity: "1 Quintal", price: "₹2,500" },
-    { crop: "Grapes", variety: "Thompson Seedless", market: "Pune (Gultekdi)", quantity: "1 Quintal", price: "₹6,000" },
-    { crop: "Onion", variety: "Red", market: "Lasalgaon", quantity: "1 Quintal", price: "₹1,800" },
-    { crop: "Soybean", variety: "JS 335", market: "Nagpur", quantity: "1 Quintal", price: "₹4,500" },
-    { crop: "Cotton", variety: "Long Staple", market: "Jalgaon", quantity: "1 Quintal", price: "₹7,200" },
-    { crop: "Pomegranate", variety: "Bhagwa", market: "Solapur", quantity: "1 Quintal", price: "₹11,000" },
-];
+import { getMarketPrices, MarketPriceRecord } from "@/ai/flows/get-market-prices";
+import { Loader2 } from "lucide-react";
 
 const priceTrendData = [
   { date: "Jan", price: 2200 },
@@ -30,14 +24,33 @@ const chartConfig = {
   },
 };
 
-
 export default function MarketplacePage() {
+    const [marketData, setMarketData] = useState<MarketPriceRecord[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchMarketData() {
+            try {
+                setLoading(true);
+                const data = await getMarketPrices();
+                setMarketData(data.records);
+            } catch (e) {
+                setError("Failed to fetch market data. Please try again later.");
+                console.error(e);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchMarketData();
+    }, []);
+
     return (
         <div className="space-y-6">
             <div>
                 <h1 className="text-3xl font-bold font-headline">Marketplace</h1>
                 <p className="text-muted-foreground">
-                    View live agricultural market rates from various APMCs.
+                    View live agricultural market rates from various APMCs across India.
                 </p>
             </div>
 
@@ -47,33 +60,42 @@ export default function MarketplacePage() {
                         <CardHeader>
                             <CardTitle>Live Market Prices</CardTitle>
                             <CardDescription>
-                                Prices for various crops sold today across different markets. API integration pending.
+                                Latest prices for various crops sold across different markets.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Crop</TableHead>
-                                        <TableHead>Market</TableHead>
-                                        <TableHead className="text-right">Price</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {marketData.map((item, index) => (
-                                        <TableRow key={index}>
-                                            <TableCell>
-                                                <div className="font-medium">{item.crop}</div>
-                                                <div className="text-sm text-muted-foreground">{item.variety}</div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge variant="outline">{item.market}</Badge>
-                                            </TableCell>
-                                            <TableCell className="text-right font-semibold">{item.price}</TableCell>
+                             {loading && (
+                                <div className="flex items-center justify-center h-64">
+                                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                                    <p className="ml-4 text-muted-foreground">Loading market data...</p>
+                                </div>
+                            )}
+                            {error && <p className="text-destructive">{error}</p>}
+                            {!loading && !error && (
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Crop</TableHead>
+                                            <TableHead>Market</TableHead>
+                                            <TableHead className="text-right">Price (Modal)</TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {marketData.map((item, index) => (
+                                            <TableRow key={index}>
+                                                <TableCell>
+                                                    <div className="font-medium">{item.commodity}</div>
+                                                    <div className="text-sm text-muted-foreground">{item.variety}</div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge variant="outline">{item.market}, {item.district}</Badge>
+                                                </TableCell>
+                                                <TableCell className="text-right font-semibold">₹{item.modal_price}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            )}
                         </CardContent>
                     </Card>
                 </div>
@@ -81,7 +103,7 @@ export default function MarketplacePage() {
                     <Card>
                         <CardHeader>
                             <CardTitle>Wheat Price Trend</CardTitle>
-                            <CardDescription>Nashik APMC - Last 6 Months</CardDescription>
+                            <CardDescription>Nashik APMC - Last 6 Months (Placeholder)</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <ChartContainer config={chartConfig} className="w-full h-[250px]">

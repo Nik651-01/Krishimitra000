@@ -33,6 +33,12 @@ const nextConfig: NextConfig = {
         hostname: 'bhuvan-vec1.nrsc.gov.in',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.data.gov.in',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
