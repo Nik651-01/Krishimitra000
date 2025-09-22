@@ -21,7 +21,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { initialized, language } = useLanguageStore();
+  const { language } = useLanguageStore();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   return (
     <html lang={language || 'en'} suppressHydrationWarning>
@@ -35,7 +40,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
       </head>
       <body className="font-body antialiased">
-        {!initialized ? (
+        {!isHydrated ? (
             <div className="flex justify-center items-center h-screen">
                 <Loader2 className="h-8 w-8 animate-spin" />
             </div>
