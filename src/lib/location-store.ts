@@ -40,7 +40,7 @@ export const useLocationStore = create<LocationState>()(
           weather: { ...weather, fetchedAt: new Date().toISOString() } 
       }),
       requestLocation: () => {
-        if (navigator.geolocation) {
+        if (typeof window !== 'undefined' && navigator.geolocation) {
           set({ loading: true, error: null });
           navigator.geolocation.getCurrentPosition(
             async (position) => {
@@ -72,7 +72,7 @@ export const useLocationStore = create<LocationState>()(
               set({ error: errorMessage, loading: false });
             }
           );
-        } else {
+        } else if (typeof window !== 'undefined') {
           set({ error: "Geolocation is not supported by this browser.", loading: false });
         }
       },
@@ -88,6 +88,3 @@ export const useLocationStore = create<LocationState>()(
     }
   )
 );
-
-// Mark the store as initialized after rehydration
-useLocationStore.setState({ initialized: true });

@@ -45,7 +45,7 @@ export async function getCropRecommendations(prevState: CropRecState, formData: 
     } catch (error) {
         console.error(error);
         return {
-            message: 'Failed to get recommendations from AI. Please try again later.',
+            message: 'Failed to get recommendations from AI. Please check your internet connection and try again.',
             data: null,
             errors: {},
         }
@@ -97,7 +97,7 @@ export async function getSoilHealthAnalysis(prevState: SoilHealthState, formData
     } catch (error) {
         console.error(error);
         return {
-            message: 'Failed to get soil health analysis from AI. Please try again later.',
+            message: 'Failed to get soil health analysis from AI. Please check your internet connection and try again.',
             data: null,
             errors: {},
         }

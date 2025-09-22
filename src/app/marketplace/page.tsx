@@ -83,14 +83,14 @@ export default function MarketplacePage() {
         setSelectedState(state);
         setSelectedDistrict(null);
         setSelectedDate(undefined);
-        setMarketData([]);
-        setFilteredMarketData([]);
         setDistricts(indianStates[state as keyof typeof indianStates] || []);
         
         try {
             setLoading(true);
             setError(null);
             const data = await getMarketPrices({ state });
+
+            // On successful fetch, replace the data
             setMarketData(data.records);
 
             // Auto-select latest date with data
@@ -100,10 +100,12 @@ export default function MarketplacePage() {
                     return recordDate > latest ? recordDate : latest;
                 }, new Date(0));
                 setSelectedDate(latestDate);
+            } else {
+                 setSelectedDate(undefined);
             }
 
         } catch (e) {
-            setError("Failed to fetch market data. Please try again later.");
+            setError("Failed to fetch market data. You may be offline. Please check your connection and try again.");
             console.error(e);
         } finally {
             setLoading(false);
@@ -111,7 +113,7 @@ export default function MarketplacePage() {
     };
 
     const handleDistrictChange = (district: string) => {
-        setSelectedDistrict(district);
+        setSelectedDistrict(district === "All" ? null : district);
     };
 
     const handleDateChange = (date: Date | undefined) => {
@@ -149,7 +151,7 @@ export default function MarketplacePage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Filter Markets</CardTitle>
-                    <CardDescription>Select a state, district, and date to narrow down results.</CardDescription>
+                    <CardDescription>Select a state to view market prices. You can then filter by district and date.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid md:grid-cols-3 gap-4">
@@ -168,7 +170,7 @@ export default function MarketplacePage() {
                         </div>
                         <div className="space-y-2">
                              <Label htmlFor="district-select">District</Label>
-                            <Select onValueChange={handleDistrictChange} value={selectedDistrict || ""} disabled={!selectedState}>
+                            <Select onValueChange={handleDistrictChange} value={selectedDistrict || "All"} disabled={!selectedState || districts.length === 0}>
                                 <SelectTrigger id="district-select">
                                     <SelectValue placeholder="Select a district" />
                                 </SelectTrigger>
@@ -194,7 +196,7 @@ export default function MarketplacePage() {
                         <CardHeader>
                             <CardTitle>Live Market Prices</CardTitle>
                              <CardDescription>
-                                {selectedState ? `Showing data for ${selectedDistrict && selectedDistrict !== 'All' ? selectedDistrict : selectedState} on ${selectedDate ? format(selectedDate, 'PPP') : 'latest date'}` : "Select a state to see prices."}
+                                {selectedState ? `Showing data for ${selectedDistrict || selectedState} on ${selectedDate ? format(selectedDate, 'PPP') : 'latest available date'}` : "Select a state to see prices."}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -204,8 +206,8 @@ export default function MarketplacePage() {
                                     <p className="ml-4 text-muted-foreground">Loading market data...</p>
                                 </div>
                             )}
-                            {error && <p className="text-destructive">{error}</p>}
-                            {!loading && !error && (
+                            {error && <p className="text-destructive text-center py-4">{error}</p>}
+                            {!loading && (
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -215,9 +217,9 @@ export default function MarketplacePage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {filteredMarketData.length === 0 && selectedState && (
+                                        {filteredMarketData.length === 0 && selectedState && !error && (
                                             <TableRow>
-                                                <TableCell colSpan={3} className="text-center text-muted-foreground">
+                                                <TableCell colSpan={3} className="text-center text-muted-foreground h-24">
                                                     No recent market data available for the selected area and date.
                                                 </TableCell>
                                             </TableRow>
