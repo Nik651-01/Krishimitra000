@@ -24,6 +24,13 @@ interface Message {
   text: string;
 }
 
+const starterQuestions = [
+    "What's the weather today?",
+    "Analyze my soil health",
+    "Recommend a crop to plant",
+    "What are current wheat prices in Maharashtra?"
+]
+
 // Check for SpeechRecognition API
 const SpeechRecognition =
   (typeof window !== 'undefined' &&
@@ -106,16 +113,21 @@ export function AssistantDialog({children}: {children: ReactNode}) {
     }
   }
 
-  const handleSubmit = async (event?: React.FormEvent<HTMLFormElement>) => {
-    event?.preventDefault();
-    if (!input.trim() || isLoading) return;
+  const handleSubmit = async (eventOrQuery: React.FormEvent<HTMLFormElement> | string) => {
+    if (typeof eventOrQuery === 'object') {
+        eventOrQuery.preventDefault();
+    }
+    
+    const query = typeof eventOrQuery === 'string' ? eventOrQuery : input;
+
+    if (!query.trim() || isLoading) return;
 
     stopAudio();
 
     const userMessage: Message = {
       id: Date.now(),
       type: 'user',
-      text: input.trim(),
+      text: query.trim(),
     };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
@@ -165,6 +177,12 @@ export function AssistantDialog({children}: {children: ReactNode}) {
 
         <ScrollArea className="h-[50vh] p-4">
           <div className="space-y-4">
+            {messages.length === 0 && !isLoading && (
+                 <div className="text-center text-muted-foreground p-4">
+                    <Sparkles className="w-8 h-8 mx-auto mb-2 text-primary" />
+                    <p>Ask me anything about your farm!</p>
+                </div>
+            )}
             {messages.map(message => (
               <div
                 key={message.id}
@@ -219,6 +237,25 @@ export function AssistantDialog({children}: {children: ReactNode}) {
         </ScrollArea>
 
         <div className="p-4 border-t">
+          {messages.length === 0 && !isLoading && (
+            <div className="mb-4">
+                <p className="text-sm text-muted-foreground mb-2">Try asking:</p>
+                <div className="flex flex-wrap gap-2">
+                    {starterQuestions.map((q) => (
+                        <Button 
+                            key={q} 
+                            variant="outline" 
+                            size="sm" 
+                            className="text-xs h-auto py-1 px-2"
+                            onClick={() => handleSubmit(q)}
+                            disabled={isLoading}
+                        >
+                            {q}
+                        </Button>
+                    ))}
+                </div>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="flex items-center gap-2">
             <Input
               value={input}
