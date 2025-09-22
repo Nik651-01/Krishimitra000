@@ -9,6 +9,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'zod';
 import {
   analyzeSoilHealthTool,
+  getGeofenceDataTool,
   getMarketPricesTool,
   getPersonalizedCropRecommendationsTool,
   getWeatherForecastTool,
@@ -50,6 +51,7 @@ const prompt = ai.definePrompt({
     getMarketPricesTool,
     reasonAboutWeatherAlertRelevanceTool,
     searchMyDocumentsTool,
+    getGeofenceDataTool,
   ],
   system: `You are KrishiMitra, a friendly and knowledgeable AI assistant for an Indian farming application.
 Your goal is to provide helpful and encouraging answers to farmers' questions.
@@ -66,6 +68,7 @@ You have access to a number of tools to help answer questions. Use them when app
 - If the user asks about market prices, use the getMarketPricesTool. You can ask for a state if needed.
 - If the user asks if a weather alert is important, use the reasonAboutWeatherAlertRelevanceTool. You may need to ask for the alert details and their current crops.
 - If the user asks a question about specific farming techniques, pest control, or information that might be in their documents (like a PDF), use the searchMyDocumentsTool.
+- If the user asks for information about a specific area of their farm (e.g., "my north field"), use the getGeofenceDataTool to retrieve soil and land use data.
 `,
   prompt: `User's question: {{{query}}}
   {{#if location}}

@@ -10,6 +10,7 @@ import { analyzeSoilHealth } from '../flows/analyze-soil-health';
 import { personalizedCropRecommendations } from '../flows/personalized-crop-recommendations';
 import { getMarketPrices } from '../flows/get-market-prices';
 import { reasonAboutWeatherAlertRelevance } from '../flows/reason-weather-alert-relevance';
+import { getGeofenceData } from '../flows/get-geofence-data';
 
 
 export const getWeatherForecastTool = ai.defineTool(
@@ -77,4 +78,17 @@ export const reasonAboutWeatherAlertRelevanceTool = ai.defineTool(
         outputSchema: z.any(),
     },
     async (input) => await reasonAboutWeatherAlertRelevance(input)
+);
+
+
+export const getGeofenceDataTool = ai.defineTool(
+    {
+        name: 'getGeofenceData',
+        description: 'Retrieves Land Use Land Cover (LULC) and SoilGrids data for a defined geographical area or named fence (e.g. "North Field").',
+        inputSchema: z.object({
+            areaIdentifier: z.string().describe('A description of the area, like "the north field" or a set of coordinates.'),
+        }),
+        outputSchema: z.any(),
+    },
+    async (input) => await getGeofenceData(input)
 );
