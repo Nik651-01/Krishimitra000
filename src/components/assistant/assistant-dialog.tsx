@@ -1,5 +1,4 @@
-
-'use client';
+"use client";
 import { useState, useEffect, useRef, ReactNode } from 'react';
 import {
   Dialog,
@@ -25,8 +24,10 @@ interface Message {
 }
 
 const starterQuestions = [
-    "What's the weather forecast?",
-    "Recommend a crop to plant",
+    "What's the weather forecast for today and the next few days?",
+    "Is it time to apply fertilizer?",
+    "Which fertilizer should I use now?",
+    "Are there any new weeds I need to worry about?"
 ]
 
 // Check for SpeechRecognition API
