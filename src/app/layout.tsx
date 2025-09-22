@@ -28,14 +28,6 @@ export default function RootLayout({
     setIsHydrated(true);
   }, []);
 
-  if (!isHydrated) {
-    return (
-        <div className="flex justify-center items-center h-screen">
-            <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
-    );
-  }
-
   return (
     <html lang={language} suppressHydrationWarning>
       <head>
@@ -48,11 +40,17 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
       </head>
       <body className="font-body antialiased">
-        <TranslationProvider>
-          <AppShell>
+        {!isHydrated ? (
+          <div className="flex justify-center items-center h-screen">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        ) : (
+          <TranslationProvider>
+            <AppShell>
               {children}
-          </AppShell>
-        </TranslationProvider>
+            </AppShell>
+          </TranslationProvider>
+        )}
         <Toaster />
       </body>
     </html>
