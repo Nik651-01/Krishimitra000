@@ -2,15 +2,14 @@
  * This is a Next.js route that streams the output of a Genkit flow.
  */
 import {NextRequest, NextResponse} from 'next/server';
-import {Message, streamToResponse, StreamingTextResponse} from 'ai';
-import { chat } from '@/ai/flows/chat';
+import {Message, StreamingTextResponse} from 'ai';
+import { chat, ChatInput } from '@/ai/flows/chat';
 
 export const runtime = 'edge';
 
 export async function POST(req: NextRequest) {
   const {
     messages,
-    ...rest
   }: {messages: Message[]; [key: string]: any} = await req.json();
 
   try {
@@ -18,7 +17,7 @@ export async function POST(req: NextRequest) {
       history: messages.map(m => ({
         role: m.role as 'user' | 'model',
         content: [{text: m.content}],
-      })),
+      })).slice(0, -1),
       message: messages.findLast(m => m.role === 'user')?.content ?? '',
     });
     return new StreamingTextResponse(stream);
