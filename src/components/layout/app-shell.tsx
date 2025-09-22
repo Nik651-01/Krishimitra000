@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { SidebarNav } from "./sidebar-nav";
 import { AssistantDialog } from "../assistant/assistant-dialog";
 import { useTranslation } from "@/hooks/use-translation";
+import { LanguageSwitcher } from "../language/language-switcher";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
     const { t } = useTranslation();
@@ -47,6 +48,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     </div>
 
                     <div className="flex items-center gap-2">
+                        <LanguageSwitcher />
                         <AssistantDialog>
                             <Button variant="ghost" size="icon" aria-label={t('appShell.aiAssistant')}>
                                 <Sparkles className="h-5 w-5" />

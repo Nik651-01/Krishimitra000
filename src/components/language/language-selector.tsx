@@ -1,19 +1,11 @@
 
 'use client';
 
-import { useLanguageStore, Language } from "@/lib/language-store";
+import { useLanguageStore } from "@/lib/language-store";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Tractor } from "lucide-react";
 import { Button } from "../ui/button";
-
-const languages: { code: Language; name: string; nativeName: string }[] = [
-  { code: 'en', name: 'English', nativeName: 'English' },
-  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी' },
-  { code: 'nag', name: 'Nagpuri', nativeName: 'नागपुरी' },
-  { code: 'sat', name: 'Santhali', nativeName: 'ᱥᱟᱱᱛᱟᱲᱤ' },
-  { code: 'kru', name: 'Kurukh', nativeName: 'कुड़ुख़' },
-  { code: 'mun', name: 'Mundari', nativeName: 'ਮੁੰਡਾਰੀ' },
-];
+import { availableLanguages } from "@/lib/languages";
 
 export function LanguageSelector() {
     const { setLanguage } = useLanguageStore();
@@ -31,7 +23,7 @@ export function LanguageSelector() {
                 </CardHeader>
                 <CardContent>
                     <div className="flex flex-col gap-2">
-                        {languages.map((lang) => (
+                        {availableLanguages.map((lang) => (
                             <Button 
                                 key={lang.code}
                                 onClick={() => setLanguage(lang.code)}
