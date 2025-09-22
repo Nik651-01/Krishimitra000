@@ -6,6 +6,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet-draw';
+import { useLocationStore } from '@/lib/location-store';
 
 // Fix for default icon issue with Leaflet and Webpack
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -23,12 +24,13 @@ L.Icon.Default.mergeOptions({
 export default function InteractiveMap() {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
+  const { location } = useLocationStore();
 
   useEffect(() => {
     // Initialize map only if the ref is available and map hasn't been initialized yet
-    if (mapRef.current && !mapInstance.current) {
+    if (mapRef.current && !mapInstance.current && location) {
       mapInstance.current = L.map(mapRef.current, {
-        center: [19.9975, 73.7898], // Centered on Nashik
+        center: [location.latitude, location.longitude],
         zoom: 13,
       });
 
@@ -110,7 +112,15 @@ export default function InteractiveMap() {
         mapInstance.current = null;
       }
     };
-  }, []); // Empty dependency array ensures this effect runs only once
+  }, [location]);
+
+  if (!location) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-muted-foreground">Please allow location access on the dashboard to view the map.</p>
+      </div>
+    );
+  }
 
   return <div ref={mapRef} style={{ height: '100%', width: '100%' }} className="rounded-md" />;
 }
