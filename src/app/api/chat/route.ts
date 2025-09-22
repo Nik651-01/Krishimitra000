@@ -13,15 +13,13 @@ export async function POST(req: NextRequest) {
   }: {messages: Message[]; [key: string]: any} = await req.json();
 
   try {
-    const stream = await chat({
+    const chatInput: ChatInput = {
       history: messages.map(m => ({
         role: m.role as 'user' | 'model',
         content: [{text: m.content}],
       })).slice(0, -1),
       message: messages.findLast(m => m.role === 'user')?.content ?? '',
-    });
+    };
+    const stream = await chat(chatInput);
     return new StreamingTextResponse(stream);
-  } catch (err: any) {
-    return NextResponse.json({error: err.message}, {status: err.status ?? 500});
-  }
-}
+  } catch (err: any) "
