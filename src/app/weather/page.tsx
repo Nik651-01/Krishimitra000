@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Sun, Cloud, CloudRain, CloudDrizzle, Thermometer, Droplets, Wind, Sunrise, Sunset, Loader2, CloudSun, WifiOff } from "lucide-react";
+import { Sun, Cloud, CloudRain, CloudDrizzle, Thermometer, Droplets, Wind, Sunrise, Sunset, Loader2, CloudSun, WifiOff, MapPin } from "lucide-react";
 import { useLocationStore } from '@/lib/location-store';
 import { getWeatherForecast, WeatherForecast } from '@/ai/flows/get-weather-forecast';
 import { cn } from '@/lib/utils';
@@ -95,12 +95,18 @@ export default function WeatherPage() {
 
             <Card>
                 <CardHeader>
-                     <div className="flex justify-between items-center">
+                     <div className="flex justify-between items-start">
                         <div>
                             <CardTitle>{t('weatherPage.currentConditions')}</CardTitle>
-                            <CardDescription>
+                            <CardDescription className="flex items-center gap-2 mt-1">
+                                <MapPin className="w-4 h-4" /> 
                                 {address?.description || t('dashboard.weather.locationNotAvailable')}
                             </CardDescription>
+                            {location && (
+                                <p className="text-xs text-muted-foreground mt-1 ml-6">
+                                    Lat: {location.latitude.toFixed(4)}, Lon: {location.longitude.toFixed(4)}
+                                </p>
+                            )}
                         </div>
                         {isStale && (
                             <div className="flex items-center gap-2 text-xs text-muted-foreground p-2 bg-muted rounded-md">
