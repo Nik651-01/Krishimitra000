@@ -1,0 +1,238 @@
+'use client';
+import { useState, useEffect, useRef } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Mic, Send, Bot, User, Loader2, Sparkles, AlertTriangle, X } from 'lucide-react';
+import { chat } from '@/ai/flows/assistant-chat';
+import { textToSpeech } from '@/ai/flows/text-to-speech';
+import { ScrollArea } from '../ui/scroll-area';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { useFormStatus } from 'react-dom';
+
+interface Message {
+  id: number;
+  type: 'user' | 'bot';
+  text: string;
+}
+
+// Check for SpeechRecognition API
+const SpeechRecognition =
+  (typeof window !== 'undefined' &&
+    ((window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition)) ||
+  null;
+
+export function AssistantDialog() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const recognitionRef = useRef<any>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (!SpeechRecognition) {
+      console.warn('Speech Recognition API not supported in this browser.');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((result: any) => result[0])
+        .map(result => result.transcript)
+        .join('');
+      setInput(transcript);
+    };
+
+    recognitionRef.current = recognition;
+  }, []);
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+    } else {
+      recognitionRef.current?.start();
+    }
+  };
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+    }
+  }
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      stopAudio();
+      setMessages([]);
+      setInput('');
+      setError(null);
+      setIsLoading(false);
+      if (isListening) {
+        recognitionRef.current?.stop();
+      }
+    }
+  }
+
+  const handleSubmit = async (event?: React.FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+    if (!input.trim() || isLoading) return;
+
+    const userMessage: Message = {
+      id: Date.now(),
+      type: 'user',
+      text: input.trim(),
+    };
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Get text response
+      const chatResponse = await chat({ query: userMessage.text });
+      const botMessage: Message = {
+        id: Date.now() + 1,
+        type: 'bot',
+        text: chatResponse.response,
+      };
+      setMessages(prev => [...prev, botMessage]);
+
+      // Get audio response
+      const ttsResponse = await textToSpeech({ text: chatResponse.response });
+      if (audioRef.current) {
+        audioRef.current.src = ttsResponse.audio;
+        audioRef.current.play();
+      }
+
+    } catch (err) {
+      console.error('Assistant error:', err);
+      setError('Sorry, I had trouble responding. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        <Button variant="default" size="icon" className="rounded-full h-10 w-10 shadow-lg">
+          <Mic />
+          <span className="sr-only">Open AI Assistant</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] md:max-w-lg grid-rows-[auto_1fr_auto] max-h-[90vh] p-0">
+        <DialogHeader className="p-4 border-b">
+          <DialogTitle className="flex items-center gap-2">
+            <Sparkles className="text-primary" />
+            KrishiMitra Assistant
+          </DialogTitle>
+        </DialogHeader>
+
+        <ScrollArea className="h-[50vh] p-4">
+          <div className="space-y-4">
+            {messages.map(message => (
+              <div
+                key={message.id}
+                className={`flex items-start gap-3 ${
+                  message.type === 'user' ? 'justify-end' : ''
+                }`}
+              >
+                {message.type === 'bot' && (
+                  <Avatar className="w-8 h-8 border">
+                    <AvatarFallback>
+                      <Bot />
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+                <div
+                  className={`rounded-lg px-3 py-2 max-w-sm ${
+                    message.type === 'user'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted'
+                  }`}
+                >
+                  <p className="text-sm">{message.text}</p>
+                </div>
+                {message.type === 'user' && (
+                  <Avatar className="w-8 h-8 border">
+                    <AvatarFallback>
+                      <User />
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+              </div>
+            ))}
+             {isLoading && (
+                 <div className="flex items-start gap-3">
+                    <Avatar className="w-8 h-8 border">
+                        <AvatarFallback>
+                            <Bot />
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="rounded-lg px-3 py-2 bg-muted flex items-center">
+                       <Loader2 className="w-5 h-5 animate-spin"/>
+                    </div>
+                </div>
+            )}
+            {error && (
+                <div className="flex items-center gap-2 text-destructive bg-destructive/10 p-2 rounded-md">
+                    <AlertTriangle className="w-5 h-5" />
+                    <p className="text-sm">{error}</p>
+                </div>
+            )}
+          </div>
+        </ScrollArea>
+
+        <div className="p-4 border-t">
+          <form onSubmit={handleSubmit} className="flex items-center gap-2">
+            <Input
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              placeholder="Ask me anything about your farm..."
+              className="flex-1"
+              disabled={isLoading}
+            />
+            <Button
+              type="button"
+              size="icon"
+              variant={isListening ? 'destructive' : 'outline'}
+              onClick={toggleListening}
+              disabled={!SpeechRecognition || isLoading}
+            >
+              <Mic className="h-5 w-5" />
+            </Button>
+            <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+              <Send className="h-5 w-5" />
+            </Button>
+          </form>
+        </div>
+        <audio ref={audioRef} className="hidden" />
+      </DialogContent>
+    </Dialog>
+  );
+}

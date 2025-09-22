@@ -7,6 +7,7 @@ import { Bell, Search, Tractor } from "lucide-react";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarNav } from "./sidebar-nav";
+import { AssistantDialog } from "../assistant/assistant-dialog";
 
 export async function AppShell({ children }: { children: React.ReactNode }) {
     return (
@@ -42,6 +43,7 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
                     </div>
 
                     <div className="flex items-center gap-2">
+                        <AssistantDialog />
                         <Button variant="ghost" size="icon">
                             <Bell className="h-5 w-5" />
                              <span className="sr-only">Notifications</span>
