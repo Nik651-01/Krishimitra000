@@ -13,7 +13,8 @@ export async function POST(req: NextRequest) {
     ...rest
   }: {messages: Message[]; flow: string; [key: string]: any} = await req.json();
 
-  const flowFn = (await import(`@/ai/flows/${flow}`))[flow];
+  const flowName = flow.endsWith('.ts') ? flow.slice(0, -3) : flow;
+  const flowFn = (await import(`@/ai/flows/${flowName}`))[flowName];
 
   try {
     const stream = await flowFn({
