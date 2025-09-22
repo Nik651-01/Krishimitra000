@@ -7,6 +7,11 @@ const InteractiveMap = dynamic(
     { ssr: false }
 );
 
-export function MapLoader() {
-    return <InteractiveMap />;
+type MapLoaderProps = {
+    onAreaSelect: (areaIdentifier: string) => void;
+    onClear: () => void;
+}
+
+export function MapLoader({ onAreaSelect, onClear }: MapLoaderProps) {
+    return <InteractiveMap onAreaSelect={onAreaSelect} onClear={onClear} />;
 }

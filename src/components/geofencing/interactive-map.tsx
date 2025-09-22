@@ -21,9 +21,16 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow.src,
 });
 
-export default function InteractiveMap() {
+type InteractiveMapProps = {
+  onAreaSelect: (areaIdentifier: string) => void;
+  onClear: () => void;
+};
+
+
+export default function InteractiveMap({ onAreaSelect, onClear }: InteractiveMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
+  const drawnItemsRef = useRef<L.FeatureGroup | null>(null);
   const { location, initialized } = useLocationStore();
 
   useEffect(() => {
@@ -40,6 +47,7 @@ export default function InteractiveMap() {
 
       const drawnItems = new L.FeatureGroup();
       mapInstance.current.addLayer(drawnItems);
+      drawnItemsRef.current = drawnItems;
       
       const drawControl = new L.Control.Draw({
         position: 'topleft',
@@ -59,49 +67,19 @@ export default function InteractiveMap() {
 
       mapInstance.current.on(L.Draw.Event.CREATED, (e: any) => {
         const layer = e.layer;
-        console.log('Polygon created:', layer.toGeoJSON());
+        const geoJSON = layer.toGeoJSON();
+        const identifier = JSON.stringify(geoJSON.geometry.coordinates);
+        
         drawnItems.clearLayers();
         drawnItems.addLayer(layer);
         
-        const lulcContainer = document.getElementById('lulc-data');
-        if(lulcContainer) {
-            lulcContainer.innerHTML = '<p>Loading LULC data for the selected area...</p>'
+        onAreaSelect(identifier);
+      });
+
+      mapInstance.current.on('draw:deletestart', () => {
+        if(drawnItemsRef.current?.getLayers().length) {
+            onClear();
         }
-    
-        const soilContainer = document.getElementById('soil-data');
-        if(soilContainer) {
-            soilContainer.innerHTML = '<p>Loading SoilGrids data for the selected area...</p>'
-        }
-    
-        // Example of displaying placeholder data after a delay
-        setTimeout(() => {
-            if(lulcContainer) {
-                lulcContainer.innerHTML = `
-                    <p class="text-sm">Bhuvan LULC data would be displayed here. Ready for API integration.</p>
-                    <table class="w-full text-sm mt-2">
-                        <thead><tr class="text-left"><th class="p-2 border-b">Land Use</th><th class="p-2 border-b">Area (sq. km)</th></tr></thead>
-                        <tbody>
-                            <tr><td class="p-2">Built-up</td><td class="p-2">0.05</td></tr>
-                            <tr><td class="p-2">Agriculture</td><td class="p-2">0.80</td></tr>
-                            <tr><td class="p-2">Fallow</td><td class="p-2">0.15</td></tr>
-                        </tbody>
-                    </table>
-                `
-            }
-            if(soilContainer) {
-                soilContainer.innerHTML = `
-                    <p class="text-sm">SoilGrids data would be displayed here. Ready for API integration.</p>
-                    <table class="w-full text-sm mt-2">
-                        <thead><tr class="text-left"><th class="p-2 border-b">Property</th><th class="p-2 border-b">Value</th></tr></thead>
-                        <tbody>
-                            <tr><td class="p-2">pH</td><td class="p-2">6.8</td></tr>
-                            <tr><td class="p-2">Organic Carbon</td><td class="p-2">1.2%</td></tr>
-                            <tr><td class="p-2">Nitrogen</td><td class="p-2">75 kg/ha</td></tr>
-                        </tbody>
-                    </table>
-                `
-            }
-        }, 2000);
       });
     }
 
@@ -112,7 +90,7 @@ export default function InteractiveMap() {
         mapInstance.current = null;
       }
     };
-  }, [location]);
+  }, [location, onAreaSelect, onClear]);
 
   if (!initialized) {
     return (

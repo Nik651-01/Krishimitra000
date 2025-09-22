@@ -1,11 +1,13 @@
 
 'use client';
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
-import { MapPin, PlusCircle, Edit, Trash2 } from "lucide-react";
+import { MapPin, PlusCircle, Edit, Trash2, Loader2 } from "lucide-react";
 import { MapLoader } from "@/components/geofencing/map-loader";
 import { useTranslation } from "@/hooks/use-translation";
+import { getGeofenceData } from "@/ai/flows/get-geofence-data";
 
 const fences = [
     {
@@ -28,8 +30,33 @@ const fences = [
     },
 ];
 
+type GeofenceData = {
+    lulcData: string;
+    soilData: string;
+} | null;
+
 export default function GeofencingPage() {
     const { t } = useTranslation();
+    const [loadingData, setLoadingData] = useState(false);
+    const [geofenceData, setGeofenceData] = useState<GeofenceData>(null);
+
+    const handleAreaSelect = async (areaIdentifier: string) => {
+        setLoadingData(true);
+        setGeofenceData(null);
+        try {
+            const data = await getGeofenceData({ areaIdentifier });
+            setGeofenceData(data);
+        } catch (error) {
+            console.error("Failed to fetch geofence data:", error);
+            // Optionally, set an error state here to show in the UI
+        } finally {
+            setLoadingData(false);
+        }
+    };
+
+    const handleClear = () => {
+        setGeofenceData(null);
+    }
 
     return (
         <div className="space-y-6">
@@ -53,7 +80,7 @@ export default function GeofencingPage() {
                 </CardHeader>
                 <CardContent>
                     <div className="relative w-full h-[500px] bg-muted rounded-md flex items-center justify-center">
-                        <MapLoader />
+                        <MapLoader onAreaSelect={handleAreaSelect} onClear={handleClear} />
                     </div>
                 </CardContent>
             </Card>
@@ -64,9 +91,16 @@ export default function GeofencingPage() {
                         <CardTitle>{t('geofencing.lulcTitle')}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div id="lulc-data">
+                         {loadingData && (
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                <span>Loading LULC data...</span>
+                            </div>
+                         )}
+                         {geofenceData && <p>{geofenceData.lulcData}</p>}
+                         {!loadingData && !geofenceData && (
                             <p className="text-muted-foreground">{t('geofencing.lulcDescription')}</p>
-                        </div>
+                         )}
                     </CardContent>
                 </Card>
                  <Card>
@@ -74,9 +108,16 @@ export default function GeofencingPage() {
                         <CardTitle>{t('geofencing.soilTitle')}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div id="soil-data">
+                        {loadingData && (
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                <span>Loading Soil data...</span>
+                            </div>
+                         )}
+                         {geofenceData && <p>{geofenceData.soilData}</p>}
+                         {!loadingData && !geofenceData && (
                              <p className="text-muted-foreground">{t('geofencing.soilDescription')}</p>
-                        </div>
+                         )}
                     </CardContent>
                 </Card>
             </div>
