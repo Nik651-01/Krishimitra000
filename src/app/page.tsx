@@ -108,10 +108,10 @@ function WeatherDisplay() {
                             {!location && !loading && ` ${t('dashboard.weather.locationNotAvailable')}`}
                         </CardDescription>
                     </div>
-                    {isStale && (
+                    {isStale && weather?.fetchedAt && (
                         <div className="flex items-center gap-2 text-xs text-muted-foreground p-2 bg-muted rounded-md">
                             <WifiOff className="w-4 h-4" />
-                            <span>{t('dashboard.weather.offline')} {formatDistanceToNow(new Date(weather.fetchedAt!), { addSuffix: true })}</span>
+                            <span>{t('dashboard.weather.offline')} {formatDistanceToNow(new Date(weather.fetchedAt), { addSuffix: true })}</span>
                         </div>
                     )}
                 </div>
@@ -159,17 +159,8 @@ function WeatherDisplay() {
 
 
 export default function DashboardPage() {
-    const { location, initialized } = useLocationStore();
+    const { location } = useLocationStore();
     const { t } = useTranslation();
-
-    // The store initializes from localStorage, we wait until it's ready.
-    if (!initialized) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
-        );
-    }
 
     return (
         <div className="space-y-6">

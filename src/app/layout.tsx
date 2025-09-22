@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { useLanguageStore } from '@/lib/language-store';
 import { Loader2 } from 'lucide-react';
 import { TranslationProvider } from '@/components/language/translation-provider';
+import { LanguageSelector } from '@/components/language/language-selector';
 
 // This metadata would ideally be dynamic based on language
 // export const metadata: Metadata = {
@@ -27,6 +28,14 @@ export default function RootLayout({
     setIsHydrated(true);
   }, []);
 
+  if (!isHydrated) {
+    return (
+        <div className="flex justify-center items-center h-screen">
+            <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+    );
+  }
+
   return (
     <html lang={language} suppressHydrationWarning>
       <head>
@@ -39,17 +48,11 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
       </head>
       <body className="font-body antialiased">
-        {!isHydrated ? (
-            <div className="flex justify-center items-center h-screen">
-                <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
-        ) : (
-          <TranslationProvider>
-            <AppShell>
-                {children}
-            </AppShell>
-          </TranslationProvider>
-        )}
+        <TranslationProvider>
+          <AppShell>
+              {children}
+          </AppShell>
+        </TranslationProvider>
         <Toaster />
       </body>
     </html>
