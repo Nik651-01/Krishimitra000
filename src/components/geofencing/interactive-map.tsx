@@ -8,6 +8,7 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet-draw';
 import 'leaflet-geometryutil';
 import { useLocationStore } from '@/lib/location-store';
+import { Loader2 } from 'lucide-react';
 
 // Fix for default icon issue with Leaflet and Webpack
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -36,7 +37,7 @@ export default function InteractiveMap({ onAreaSelect, onFirstVertex, onClear }:
   const { location, initialized } = useLocationStore();
 
   useEffect(() => {
-    if (mapRef.current && !mapInstance.current && location) {
+    if (mapRef.current && !mapInstance.current && initialized && location) {
       mapInstance.current = L.map(mapRef.current, {
         center: [location.latitude, location.longitude],
         zoom: 13,
@@ -53,7 +54,14 @@ export default function InteractiveMap({ onAreaSelect, onFirstVertex, onClear }:
       const drawControl = new L.Control.Draw({
         position: 'topleft',
         draw: {
-          polygon: true,
+          polygon: {
+            allowIntersection: false,
+            showArea: true,
+            metric: false, // Turn off metric area calculation
+            feet: false,
+            // @ts-ignore
+            showLength: false,
+          },
           polyline: false,
           rectangle: false,
           circle: false,
@@ -72,35 +80,36 @@ export default function InteractiveMap({ onAreaSelect, onFirstVertex, onClear }:
             onClear();
 
             const onFirstClick = (clickEvent: L.LeafletMouseEvent) => {
-                const latlng = clickEvent.latlng;
-                const identifier = `${latlng.lat},${latlng.lng}`;
-                onFirstVertex(identifier);
-                mapInstance.current?.off('click', onFirstClick);
+                if (mapInstance.current) {
+                    const latlng = clickEvent.latlng;
+                    const identifier = `${latlng.lat},${latlng.lng}`;
+                    onFirstVertex(identifier);
+                    mapInstance.current.off('click', onFirstClick);
+                }
             };
             mapInstance.current?.on('click', onFirstClick);
         }
       });
 
       mapInstance.current.on(L.Draw.Event.CREATED, (e: any) => {
-        const layer = e.layer;
-        const geoJSON = layer.toGeoJSON();
-        const identifier = JSON.stringify(geoJSON.geometry.coordinates);
-        
-        // Calculate area
-        const areaMeters = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
-        const areaAcres = areaMeters * 0.000247105;
-
-        drawnItems.clearLayers();
-        drawnItems.addLayer(layer);
-        
-        onAreaSelect(identifier, areaAcres);
-      });
-
-      mapInstance.current.on('draw:deletestart', () => {
-        if(drawnItemsRef.current?.getLayers().length) {
-            onClear();
+        if (e.layerType === 'polygon') {
+            const layer = e.layer;
+            drawnItems.addLayer(layer);
+            
+            const geoJSON = layer.toGeoJSON();
+            const identifier = JSON.stringify(geoJSON.geometry.coordinates);
+            
+            const areaMeters = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+            const areaAcres = areaMeters * 0.000247105;
+            
+            onAreaSelect(identifier, areaAcres);
         }
       });
+
+      mapInstance.current.on('draw:deleted', () => {
+          onClear();
+      });
+
     }
 
     // Cleanup function to run when the component unmounts
@@ -110,20 +119,20 @@ export default function InteractiveMap({ onAreaSelect, onFirstVertex, onClear }:
         mapInstance.current = null;
       }
     };
-  }, [location, onAreaSelect, onClear, onFirstVertex]);
+  }, [initialized, location, onAreaSelect, onClear, onFirstVertex]);
 
   if (!initialized) {
     return (
         <div className="flex items-center justify-center h-full">
-            <p className="text-muted-foreground">Initializing...</p>
+            <Loader2 className="h-8 w-8 animate-spin" />
         </div>
     )
   }
 
   if (!location) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-muted-foreground">Please allow location access on the dashboard to view the map.</p>
+      <div className="flex items-center justify-center h-full text-center p-4">
+        <p className="text-muted-foreground">Please allow location access on the dashboard to view and interact with the map.</p>
       </div>
     );
   }
