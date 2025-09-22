@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Sun, Cloud, CloudRain, CloudDrizzle, Thermometer, Droplets, Wind, Sunrise, Sunset, Loader2, CloudSun } from "lucide-react";
 import { useLocationStore } from '@/lib/location-store';
 import { getWeatherForecast, WeatherForecast } from '@/ai/flows/get-weather-forecast';
+import { cn } from '@/lib/utils';
 
 const weeklyForecastData = [
     { day: "Tue", icon: CloudRain, high: 28, low: 21, desc: "Heavy Rain" },
@@ -92,7 +93,7 @@ export default function WeatherPage() {
                 <CardHeader>
                     <CardTitle>Current Conditions</CardTitle>
                 </CardHeader>
-                 <CardContent>
+                 <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                     {loading && (
                         <div className="flex items-center justify-center h-32 col-span-full">
                             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -104,38 +105,52 @@ export default function WeatherPage() {
                         <p className="text-muted-foreground h-32 flex items-center col-span-full">Share your location on the dashboard to see local weather conditions.</p>
                     )}
                     {weather && !loading && (
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                            <Card className="flex flex-col items-center justify-center text-center p-4 lg:col-span-2">
+                        <>
+                            <div className="flex items-center gap-4 lg:col-span-2">
                                 <WeatherIcon description={weather.description} />
-                                <p className="text-5xl font-bold mt-2">{weather.currentTemp}°C</p>
-                                <p className="text-muted-foreground">{weather.description}</p>
-                            </Card>
-                            <Card className="flex flex-col items-center justify-center text-center p-4">
-                                <Thermometer className="w-8 h-8 text-primary" />
-                                <p className="font-semibold mt-2">High / Low</p>
-                                <p className="text-2xl font-semibold">{weather.tempHigh}° / {weather.tempLow}°</p>
-                            </Card>
-                            <Card className="flex flex-col items-center justify-center text-center p-4">
-                                <Droplets className="w-8 h-8 text-primary" />
-                                <p className="font-semibold mt-2">Humidity</p>
-                                <p className="text-2xl font-semibold">{weather.humidity}%</p>
-                            </Card>
-                             <Card className="flex flex-col items-center justify-center text-center p-4">
-                                <Wind className="w-8 h-8 text-primary" />
-                                <p className="font-semibold mt-2">Wind</p>
-                                <p className="text-2xl font-semibold">{weather.windSpeed} km/h</p>
-                            </Card>
-                            <Card className="flex flex-col items-center justify-center text-center p-4">
-                                <Sunrise className="w-8 h-8 text-amber-500" />
-                                <p className="font-semibold mt-2">Sunrise</p>
-                                <p className="text-2xl font-semibold">6:10 AM</p>
-                            </Card>
-                             <Card className="flex flex-col items-center justify-center text-center p-4">
-                                <Sunset className="w-8 h-8 text-orange-500" />
-                                <p className="font-semibold mt-2">Sunset</p>
-                                <p className="text-2xl font-semibold">7:05 PM</p>
-                            </Card>
-                        </div>
+                                <div>
+                                    <p className="text-5xl font-bold">{weather.currentTemp}°C</p>
+                                    <p className="text-muted-foreground">{weather.description}</p>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 col-span-full sm:col-span-1 lg:col-span-2">
+                                <div className="flex items-center gap-2">
+                                    <Thermometer className="w-6 h-6 text-muted-foreground" />
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">High / Low</p>
+                                        <p className="font-semibold">{weather.tempHigh}° / {weather.tempLow}°</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Droplets className="w-6 h-6 text-muted-foreground" />
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">Humidity</p>
+                                        <p className="font-semibold">{weather.humidity}%</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Wind className="w-6 h-6 text-muted-foreground" />
+                                     <div>
+                                        <p className="text-sm text-muted-foreground">Wind</p>
+                                        <p className="font-semibold">{weather.windSpeed} km/h</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Sunrise className="w-6 h-6 text-muted-foreground" />
+                                     <div>
+                                        <p className="text-sm text-muted-foreground">Sunrise</p>
+                                        <p className="font-semibold">6:10 AM</p>
+                                    </div>
+                                </div>
+                                 <div className="flex items-center gap-2">
+                                    <Sunset className="w-6 h-6 text-muted-foreground" />
+                                     <div>
+                                        <p className="text-sm text-muted-foreground">Sunset</p>
+                                        <p className="font-semibold">7:05 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
                     )}
                 </CardContent>
             </Card>
@@ -176,3 +191,4 @@ export default function WeatherPage() {
     );
 
     
+}
