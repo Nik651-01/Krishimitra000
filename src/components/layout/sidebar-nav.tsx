@@ -3,7 +3,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Leaf, TestTube2, CloudSun, BookOpen, MapPin, ShoppingCart, Sparkles, BrainCircuit } from 'lucide-react';
+import { Home, Leaf, TestTube2, CloudSun, BookOpen, MapPin, ShoppingCart, Sparkles } from 'lucide-react';
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { AssistantDialog } from '../assistant/assistant-dialog';
 import { Button } from '../ui/button';
@@ -16,7 +16,6 @@ const navItems = [
     { href: '/advisories', icon: BookOpen, label: 'Advisory Services' },
     { href: '/geofencing', icon: MapPin, label: 'Geofencing' },
     { href: '/marketplace', icon: ShoppingCart, label: 'Marketplace' },
-    { href: '/training-ai', icon: BrainCircuit, label: 'Training AI' },
 ];
 
 export function SidebarNav() {
