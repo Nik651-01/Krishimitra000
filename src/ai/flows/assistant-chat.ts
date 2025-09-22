@@ -14,6 +14,7 @@ import {
   getWeatherForecastTool,
   reasonAboutWeatherAlertRelevanceTool,
 } from '../tools/app-tools';
+import { searchMyDocumentsTool } from '../tools/document-search-tool';
 
 const AssistantChatInputSchema = z.object({
   query: z.string().describe("The user's query or message."),
@@ -48,6 +49,7 @@ const prompt = ai.definePrompt({
     getPersonalizedCropRecommendationsTool,
     getMarketPricesTool,
     reasonAboutWeatherAlertRelevanceTool,
+    searchMyDocumentsTool,
   ],
   system: `You are KrishiMitra, a friendly and knowledgeable AI assistant for an Indian farming application.
 Your goal is to provide concise, helpful, and encouraging answers to farmers' questions.
@@ -60,6 +62,7 @@ You have access to a number of tools to help answer questions. Use them when app
 - If the user asks for crop recommendations, use the getPersonalizedCropRecommendationsTool. You may need to ask for soil and climate data if it's not provided.
 - If the user asks about market prices, use the getMarketPricesTool. You can ask for a state if needed.
 - If the user asks if a weather alert is important, use the reasonAboutWeatherAlertRelevanceTool. You may need to ask for the alert details and their current crops.
+- If the user asks a question about specific farming techniques, pest control, or information that might be in their documents (like a PDF), use the searchMyDocumentsTool.
 `,
   prompt: `User's question: {{{query}}}
   {{#if location}}

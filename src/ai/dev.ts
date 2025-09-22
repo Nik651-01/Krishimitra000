@@ -11,3 +11,4 @@ import '@/ai/flows/get-market-prices.ts';
 import '@/ai/flows/assistant-chat.ts';
 import '@/ai/flows/text-to-speech.ts';
 import '@/ai/tools/app-tools.ts';
+import '@/ai/tools/document-search-tool.ts';
