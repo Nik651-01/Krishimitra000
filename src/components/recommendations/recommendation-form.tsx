@@ -1,5 +1,5 @@
 'use client';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useFormStatus } from 'react';
 import { getCropRecommendations, State } from '@/lib/actions';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -20,7 +20,7 @@ function SubmitButton() {
 
 export function RecommendationForm() {
     const initialState: State = { message: null, errors: {}, data: null };
-    const [state, dispatch] = useFormState(getCropRecommendations, initialState);
+    const [state, dispatch] = useActionState(getCropRecommendations, initialState);
 
     return (
         <div className="space-y-8">

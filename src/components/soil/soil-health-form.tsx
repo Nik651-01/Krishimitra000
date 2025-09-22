@@ -1,5 +1,5 @@
 'use client';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useFormStatus } from 'react';
 import { getCropRecommendations, State } from '@/lib/actions';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -30,7 +30,7 @@ async function getSoilHealthAnalysis(prevState: State, formData: FormData) {
 
 export function SoilHealthForm() {
     const initialState: State = { message: null, errors: {}, data: null };
-    const [state, dispatch] = useFormState(getSoilHealthAnalysis, initialState);
+    const [state, dispatch] = useActionState(getSoilHealthAnalysis, initialState);
 
     return (
         <div className="space-y-8">
