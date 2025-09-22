@@ -20,12 +20,16 @@ export type GetWeatherForecastInput = z.infer<
 
 const WeatherForecastSchema = z.object({
   currentTemp: z.number().describe('Current temperature in Celsius.'),
-  tempHigh: z.number().describe('Today\'s high temperature in Celsius.'),
-  tempLow: z.number().describe('Today\'s low temperature in Celsius.'),
-  description: z.string().describe('A brief description of the weather (e.g., "Partly Drizzly").'),
+  tempHigh: z.number().describe("Today's high temperature in Celsius."),
+  tempLow: z.number().describe("Today's low temperature in Celsius."),
+  description: z
+    .string()
+    .describe('A brief description of the weather (e.g., "Partly Drizzly").'),
   humidity: z.number().describe('Humidity percentage.'),
   windSpeed: z.number().describe('Wind speed in km/h.'),
-  reasoning: z.string().describe('Reasoning for the generated forecast.'),
+  reasoning: z
+    .string()
+    .describe('Reasoning for the generated forecast.'),
 });
 export type WeatherForecast = z.infer<typeof WeatherForecastSchema>;
 
@@ -35,19 +39,32 @@ export async function getWeatherForecast(
   return getWeatherForecastFlow(input);
 }
 
-const prompt = ai.definePrompt({
-  name: 'getWeatherForecastPrompt',
-  input: {schema: GetWeatherForecastInputSchema},
-  output: {schema: WeatherForecastSchema},
-  prompt: `You are a weather simulation API. Generate a realistic-looking but fictional current weather forecast for the given location.
+// This function simulates a weather forecast locally to avoid API calls.
+function simulateWeather(latitude: number, longitude: number): WeatherForecast {
+  // Base values (can be adjusted for more realism based on location)
+  const baseTemp = 25 + (latitude - 20) * -1; // Simple latitude-based temp
+  const descriptions = ["Partly Drizzly", "Clear Skies", "Overcast", "Light Showers", "Sunny"];
 
-  Location:
-  Latitude: {{{latitude}}}
-  Longitude: {{{longitude}}}
+  // Generate random variations
+  const tempVariation = (Math.random() - 0.5) * 5;
+  const currentTemp = Math.round(baseTemp + tempVariation);
+  const tempHigh = currentTemp + Math.floor(Math.random() * 5);
+  const tempLow = currentTemp - Math.floor(Math.random() * 5);
+  const humidity = 50 + Math.floor(Math.random() * 40);
+  const windSpeed = 5 + Math.floor(Math.random() * 15);
+  const description = descriptions[Math.floor(Math.random() * descriptions.length)];
 
-  Base your simulation on general climate patterns for India. For instance, if the location is in a tropical zone, reflect that in the temperature and humidity. Make the values slightly different for each request to simulate real-time data.
-  `,
-});
+  return {
+    currentTemp,
+    tempHigh,
+    tempLow,
+    description,
+    humidity,
+    windSpeed,
+    reasoning: "This is locally simulated data for demonstration purposes.",
+  };
+}
+
 
 const getWeatherForecastFlow = ai.defineFlow(
   {
@@ -57,8 +74,8 @@ const getWeatherForecastFlow = ai.defineFlow(
   },
   async input => {
     // In a real application, you would call a weather API here.
-    // For this demo, we'll use an AI prompt to simulate the data.
-    const {output} = await prompt(input);
-    return output!;
+    // For this demo, we are simulating the data locally to avoid API rate limits.
+    const forecast = simulateWeather(input.latitude, input.longitude);
+    return forecast;
   }
 );
