@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
@@ -42,7 +42,7 @@ export default function GeofencingPage() {
     const [geofenceData, setGeofenceData] = useState<GeofenceData>(null);
     const [polygonArea, setPolygonArea] = useState<number | null>(null);
 
-    const handleFirstVertex = async (areaIdentifier: string) => {
+    const handleFirstVertex = useCallback(async (areaIdentifier: string) => {
         setLoadingSoil(true);
         setGeofenceData(prev => ({ ...(prev || { lulcData: '', soilData: '' }), soilData: '' }));
          try {
@@ -54,9 +54,9 @@ export default function GeofencingPage() {
         } finally {
             setLoadingSoil(false);
         }
-    }
+    }, []);
 
-    const handleAreaSelect = async (areaIdentifier: string, area: number) => {
+    const handleAreaSelect = useCallback(async (areaIdentifier: string, area: number) => {
         setLoadingLulc(true);
         setPolygonArea(area);
         setGeofenceData(prev => ({ ...(prev || { lulcData: '', soilData: '' }), lulcData: '' }));
@@ -70,12 +70,12 @@ export default function GeofencingPage() {
         } finally {
             setLoadingLulc(false);
         }
-    };
+    }, []);
 
-    const handleClear = () => {
+    const handleClear = useCallback(() => {
         setGeofenceData(null);
         setPolygonArea(null);
-    }
+    }, []);
 
     return (
         <div className="space-y-6">

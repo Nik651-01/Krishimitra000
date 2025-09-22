@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -119,6 +119,9 @@ export default function InteractiveMap({ onAreaSelect, onFirstVertex, onClear }:
         mapInstance.current = null;
       }
     };
+  // We remove the handler functions from the dependency array because they
+  // are wrapped in `useCallback` in the parent component, which memoizes them.
+  // Their references will not change across re-renders.
   }, [initialized, location, onAreaSelect, onClear, onFirstVertex]);
 
   if (!initialized) {
