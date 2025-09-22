@@ -10,3 +10,4 @@ import '@/ai/flows/analyze-soil-health.ts';
 import '@/ai/flows/get-market-prices.ts';
 import '@/ai/flows/assistant-chat.ts';
 import '@/ai/flows/text-to-speech.ts';
+import '@/ai/tools/app-tools.ts';

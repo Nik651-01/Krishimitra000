@@ -16,6 +16,7 @@ import { textToSpeech } from '@/ai/flows/text-to-speech';
 import { ScrollArea } from '../ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useFormStatus } from 'react-dom';
+import { useLocationStore } from '@/lib/location-store';
 
 interface Message {
   id: number;
@@ -37,6 +38,8 @@ export function AssistantDialog({children}: {children: ReactNode}) {
   const [isListening, setIsListening] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { location } = useLocationStore();
 
   const recognitionRef = useRef<any>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -119,7 +122,10 @@ export function AssistantDialog({children}: {children: ReactNode}) {
 
     try {
       // Get text response
-      const chatResponse = await chat({ query: userMessage.text });
+      const chatResponse = await chat({ 
+        query: userMessage.text,
+        location: location || undefined
+      });
       const botMessage: Message = {
         id: Date.now() + 1,
         type: 'bot',
