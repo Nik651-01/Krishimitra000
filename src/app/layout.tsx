@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { useLanguageStore } from '@/lib/language-store';
 import { LanguageSelector } from '@/components/language/language-selector';
 import { Loader2 } from 'lucide-react';
+import { TranslationProvider } from '@/components/language/translation-provider';
 
 // This metadata would ideally be dynamic based on language
 // export const metadata: Metadata = {
@@ -41,9 +42,11 @@ export default function RootLayout({
         ) : !language ? (
           <LanguageSelector />
         ) : (
-          <AppShell>
-              {children}
-          </AppShell>
+          <TranslationProvider>
+            <AppShell>
+                {children}
+            </AppShell>
+          </TranslationProvider>
         )}
         <Toaster />
       </body>

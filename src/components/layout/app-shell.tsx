@@ -1,3 +1,4 @@
+
 "use client";
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarInset, SidebarTrigger, SidebarFooter } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,8 +9,11 @@ import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarNav } from "./sidebar-nav";
 import { AssistantDialog } from "../assistant/assistant-dialog";
+import { useTranslation } from "@/hooks/use-translation";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+    const { t } = useTranslation();
+    
     return (
         <SidebarProvider>
             <Sidebar>
@@ -38,20 +42,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <div className="items-center gap-4 hidden md:flex flex-1">
                         <div className="relative w-full max-w-sm">
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input placeholder="Search..." className="pl-8" />
+                            <Input placeholder={t('appShell.searchPlaceholder')} className="pl-8" />
                         </div>
                     </div>
 
                     <div className="flex items-center gap-2">
                         <AssistantDialog>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="ghost" size="icon" aria-label={t('appShell.aiAssistant')}>
                                 <Sparkles className="h-5 w-5" />
-                                <span className="sr-only">AI Assistant</span>
+                                <span className="sr-only">{t('appShell.aiAssistant')}</span>
                             </Button>
                         </AssistantDialog>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label={t('appShell.notifications')}>
                             <Bell className="h-5 w-5" />
-                             <span className="sr-only">Notifications</span>
+                             <span className="sr-only">{t('appShell.notifications')}</span>
                         </Button>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -68,10 +72,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                                     <p className="text-xs text-muted-foreground font-normal">farmer.kumar@example.com</p>
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>Profile</DropdownMenuItem>
-                                <DropdownMenuItem>Settings</DropdownMenuItem>
+                                <DropdownMenuItem>{t('appShell.profile')}</DropdownMenuItem>
+                                <DropdownMenuItem>{t('appShell.settings')}</DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>Logout</DropdownMenuItem>
+                                <DropdownMenuItem>{t('appShell.logout')}</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>

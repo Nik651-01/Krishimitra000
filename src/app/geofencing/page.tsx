@@ -1,8 +1,11 @@
+
+'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { List, ListItem } from "@/components/ui/list";
 import { MapPin, PlusCircle, Edit, Trash2 } from "lucide-react";
 import { MapLoader } from "@/components/geofencing/map-loader";
+import { useTranslation } from "@/hooks/use-translation";
 
 const fences = [
     {
@@ -26,26 +29,27 @@ const fences = [
 ];
 
 export default function GeofencingPage() {
+    const { t } = useTranslation();
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-start">
                 <div>
-                    <h1 className="text-3xl font-bold font-headline">Geofencing</h1>
+                    <h1 className="text-3xl font-bold font-headline">{t('geofencing.title')}</h1>
                     <p className="text-muted-foreground">
-                        Define and manage virtual boundaries for your farm areas. Draw a polygon to analyze an area.
+                        {t('geofencing.description')}
                     </p>
                 </div>
                 <Button>
                     <PlusCircle />
-                    <span>Create New Fence</span>
+                    <span>{t('geofencing.createFence')}</span>
                 </Button>
             </div>
             
             <Card>
                 <CardHeader>
-                    <CardTitle>Interactive Farm Map</CardTitle>
-                    <CardDescription>A visual overview of your farm. Use the tools on the left to draw a new geofenced area.</CardDescription>
+                    <CardTitle>{t('geofencing.mapTitle')}</CardTitle>
+                    <CardDescription>{t('geofencing.mapDescription')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="relative w-full h-[500px] bg-muted rounded-md flex items-center justify-center">
@@ -57,21 +61,21 @@ export default function GeofencingPage() {
             <div className="grid md:grid-cols-2 gap-6">
                  <Card>
                     <CardHeader>
-                        <CardTitle>Bhuvan LULC Data</CardTitle>
+                        <CardTitle>{t('geofencing.lulcTitle')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div id="lulc-data">
-                            <p className="text-muted-foreground">Draw a polygon on the map to get Land Use Land Cover data for that area.</p>
+                            <p className="text-muted-foreground">{t('geofencing.lulcDescription')}</p>
                         </div>
                     </CardContent>
                 </Card>
                  <Card>
                     <CardHeader>
-                        <CardTitle>SoilGrids Data</CardTitle>
+                        <CardTitle>{t('geofencing.soilTitle')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div id="soil-data">
-                             <p className="text-muted-foreground">Draw a polygon on the map to get SoilGrids data for that area.</p>
+                             <p className="text-muted-foreground">{t('geofencing.soilDescription')}</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -79,7 +83,7 @@ export default function GeofencingPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Defined Fences</CardTitle>
+                    <CardTitle>{t('geofencing.definedFences')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <List>
@@ -90,7 +94,7 @@ export default function GeofencingPage() {
                                     <div className="flex-1">
                                         <p className="font-semibold">{fence.name}</p>
                                         <p className="text-sm text-muted-foreground">
-                                            {fence.area} - Current Crop: {fence.crop}
+                                            {fence.area} - {t('geofencing.currentCrop')}: {fence.crop}
                                         </p>
                                     </div>
                                 </div>

@@ -1,3 +1,4 @@
+
 "use client";
 import { useState, useEffect, useRef, ReactNode } from 'react';
 import {
@@ -9,26 +10,19 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Mic, Send, Bot, User, Loader2, Sparkles, AlertTriangle, X } from 'lucide-react';
+import { Mic, Send, Bot, User, Loader2, Sparkles, AlertTriangle } from 'lucide-react';
 import { chat } from '@/ai/flows/assistant-chat';
 import { textToSpeech } from '@/ai/flows/text-to-speech';
 import { ScrollArea } from '../ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { useFormStatus } from 'react-dom';
+import { Avatar, AvatarFallback } from '../ui/avatar';
 import { useLocationStore } from '@/lib/location-store';
+import { useTranslation } from '@/hooks/use-translation';
 
 interface Message {
   id: number;
   type: 'user' | 'bot';
   text: string;
 }
-
-const starterQuestions = [
-    "What's the weather forecast for today and the next few days?",
-    "Is it time to apply fertilizer?",
-    "Which fertilizer should I use now?",
-    "Are there any new weeds I need to worry about?"
-]
 
 // Check for SpeechRecognition API
 const SpeechRecognition =
@@ -46,6 +40,14 @@ export function AssistantDialog({children}: {children: ReactNode}) {
   const [error, setError] = useState<string | null>(null);
 
   const { location } = useLocationStore();
+  const { t } = useTranslation();
+
+  const starterQuestions = [
+    t('assistant.starter1'),
+    t('assistant.starter2'),
+    t('assistant.starter3'),
+    t('assistant.starter4')
+  ];
 
   const recognitionRef = useRef<any>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -66,7 +68,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
       if (event.error === 'not-allowed') {
-        setError('Microphone access denied. Please enable it in your browser settings.');
+        setError(t('assistant.micDenied'));
       }
       setIsListening(false);
     };
@@ -80,7 +82,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
     };
 
     recognitionRef.current = recognition;
-  }, []);
+  }, [t]);
 
   const toggleListening = () => {
     if (isListening) {
@@ -155,7 +157,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
 
     } catch (err) {
       console.error('Assistant error:', err);
-      setError('Sorry, I had trouble responding. Please try again.');
+      setError(t('assistant.error'));
     } finally {
       setIsLoading(false);
     }
@@ -170,7 +172,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
         <DialogHeader className="p-4 border-b">
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="text-primary" />
-            KrishiMitra Assistant
+            {t('assistant.title')}
           </DialogTitle>
         </DialogHeader>
 
@@ -179,7 +181,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
             {messages.length === 0 && !isLoading && (
                  <div className="text-center text-muted-foreground p-4">
                     <Sparkles className="w-8 h-8 mx-auto mb-2 text-primary" />
-                    <p>Ask me anything about your farm!</p>
+                    <p>{t('assistant.welcome')}</p>
                 </div>
             )}
             {messages.map(message => (
@@ -238,7 +240,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
         <div className="p-4 border-t">
           {messages.length === 0 && !isLoading && (
             <div className="mb-4">
-                <p className="text-sm text-muted-foreground mb-2">Try asking:</p>
+                <p className="text-sm text-muted-foreground mb-2">{t('assistant.starterQuestions')}</p>
                 <div className="flex flex-wrap gap-2">
                     {starterQuestions.map((q) => (
                         <Button 
@@ -259,7 +261,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
             <Input
               value={input}
               onChange={e => setInput(e.target.value)}
-              placeholder="Ask me anything about your farm..."
+              placeholder={t('assistant.placeholder')}
               className="flex-1"
               disabled={isLoading}
             />

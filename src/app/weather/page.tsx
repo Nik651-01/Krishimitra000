@@ -9,6 +9,7 @@ import { useLocationStore } from '@/lib/location-store';
 import { getWeatherForecast, WeatherForecast } from '@/ai/flows/get-weather-forecast';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
+import { useTranslation } from '@/hooks/use-translation';
 
 const weeklyForecastData = [
     { day: "Tue", icon: CloudRain, high: 28, low: 21, desc: "Heavy Rain" },
@@ -37,6 +38,7 @@ export default function WeatherPage() {
     const { location, address, initialized, weather, setWeather } = useLocationStore();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         async function fetchWeather() {
@@ -50,7 +52,7 @@ export default function WeatherPage() {
                     });
                     setWeather(forecast);
                 } catch (e) {
-                    setError("Could not fetch fresh weather data.");
+                    setError(t('weatherPage.error'));
                     console.error(e);
                 } finally {
                     setLoading(false);
@@ -60,7 +62,7 @@ export default function WeatherPage() {
             }
         }
         fetchWeather();
-    }, [location, initialized, setWeather]);
+    }, [location, initialized, setWeather, t]);
     
     if (!initialized) {
         return (
@@ -85,20 +87,20 @@ export default function WeatherPage() {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Weather Forecast</h1>
+                <h1 className="text-3xl font-bold font-headline">{t('weatherPage.title')}</h1>
                 <p className="text-muted-foreground">
-                    {address ? `7-day forecast for ${address.description}` : "7-day forecast. Share your location for local weather."}
+                    {address ? t('weatherPage.description', {location: address.description}) : t('weatherPage.descriptionNoLocation')}
                 </p>
             </div>
 
             <Card>
                 <CardHeader>
                      <div className="flex justify-between items-center">
-                        <CardTitle>Current Conditions</CardTitle>
+                        <CardTitle>{t('weatherPage.currentConditions')}</CardTitle>
                         {isStale && (
                             <div className="flex items-center gap-2 text-xs text-muted-foreground p-2 bg-muted rounded-md">
                                 <WifiOff className="w-4 h-4" />
-                                <span>Offline. Last updated {formatDistanceToNow(new Date(weather.fetchedAt!), { addSuffix: true })}</span>
+                                <span>{t('weatherPage.offline')} {formatDistanceToNow(new Date(weather.fetchedAt!), { addSuffix: true })}</span>
                             </div>
                         )}
                     </div>
@@ -107,13 +109,13 @@ export default function WeatherPage() {
                     {loading && (
                         <div className="flex items-center justify-center h-32 col-span-full">
                             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                            <p className="ml-4 text-muted-foreground">Fetching weather for your location...</p>
+                            <p className="ml-4 text-muted-foreground">{t('weatherPage.loading')}</p>
                         </div>
                     )}
-                    {error && !weather && <p className="text-destructive h-32 flex items-center col-span-full">{error} Please check your connection.</p>}
+                    {error && !weather && <p className="text-destructive h-32 flex items-center col-span-full">{error} {t('weatherPage.checkConnection')}</p>}
 
                     {!location && !loading && !weather && (
-                        <p className="text-muted-foreground h-32 flex items-center col-span-full">Share your location on the dashboard to see local weather conditions.</p>
+                        <p className="text-muted-foreground h-32 flex items-center col-span-full">{t('weatherPage.shareLocationPrompt')}</p>
                     )}
                     {weather && (
                         <>
@@ -128,35 +130,35 @@ export default function WeatherPage() {
                                 <div className="flex items-center gap-2">
                                     <Thermometer className="w-6 h-6 text-muted-foreground" />
                                     <div>
-                                        <p className="text-sm text-muted-foreground">High / Low</p>
+                                        <p className="text-sm text-muted-foreground">{t('dashboard.weather.tempHighLow')}</p>
                                         <p className="font-semibold">{weather.tempHigh}° / {weather.tempLow}°</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Droplets className="w-6 h-6 text-muted-foreground" />
                                     <div>
-                                        <p className="text-sm text-muted-foreground">Humidity</p>
+                                        <p className="text-sm text-muted-foreground">{t('dashboard.weather.humidity')}</p>
                                         <p className="font-semibold">{weather.humidity}%</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Wind className="w-6 h-6 text-muted-foreground" />
                                      <div>
-                                        <p className="text-sm text-muted-foreground">Wind</p>
+                                        <p className="text-sm text-muted-foreground">{t('dashboard.weather.wind')}</p>
                                         <p className="font-semibold">{weather.windSpeed} km/h</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Sunrise className="w-6 h-6 text-muted-foreground" />
                                      <div>
-                                        <p className="text-sm text-muted-foreground">Sunrise</p>
+                                        <p className="text-sm text-muted-foreground">{t('dashboard.weather.sunrise')}</p>
                                         <p className="font-semibold">6:10 AM</p>
                                     </div>
                                 </div>
                                  <div className="flex items-center gap-2">
                                     <Sunset className="w-6 h-6 text-muted-foreground" />
                                      <div>
-                                        <p className="text-sm text-muted-foreground">Sunset</p>
+                                        <p className="text-sm text-muted-foreground">{t('dashboard.weather.sunset')}</p>
                                         <p className="font-semibold">7:05 PM</p>
                                     </div>
                                 </div>
@@ -168,22 +170,22 @@ export default function WeatherPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Weekly Forecast</CardTitle>
+                    <CardTitle>{t('weatherPage.weeklyForecast')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="min-w-[120px]">Day</TableHead>
-                                    <TableHead>Condition</TableHead>
-                                    <TableHead className="text-right">High / Low</TableHead>
+                                    <TableHead className="min-w-[120px]">{t('weatherPage.day')}</TableHead>
+                                    <TableHead>{t('weatherPage.condition')}</TableHead>
+                                    <TableHead className="text-right">{t('weatherPage.highLow')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {forecast.map(f => (
                                     <TableRow key={f.day}>
-                                        <TableCell className="font-medium">{f.day}</TableCell>
+                                        <TableCell className="font-medium">{f.day === 'Today' ? t('weatherPage.today') : f.day}</TableCell>
                                         <TableCell>
                                             <div className="flex items-center gap-2">
                                                 <f.icon description={f.desc} className="w-6 h-6" />

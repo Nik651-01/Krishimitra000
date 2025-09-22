@@ -1,0 +1,207 @@
+
+{
+    "nav": {
+        "dashboard": "Dashboard",
+        "cropRecommendations": "Crop Recommendations",
+        "soilHealth": "Soil Health",
+        "weather": "Weather",
+        "advisoryServices": "Advisory Services",
+        "geofencing": "Geofencing",
+        "marketplace": "Marketplace",
+        "aiAssistant": "AI Assistant"
+    },
+    "languageSelector": {
+        "welcome": "Welcome to KrishiMitra",
+        "title": "Choose Your Language",
+        "description": "Select a language to continue"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "welcome": "Welcome back, here's your farm's overview.",
+        "locationPrompt": {
+            "title": "Personalize Your Experience",
+            "description": "Share your location to get weather and advisories relevant to your farm.",
+            "button": "Share Location"
+        },
+        "weather": {
+            "title": "Today's Weather",
+            "locationNotAvailable": "(Location not available)",
+            "loading": "Fetching weather...",
+            "error": "Could not fetch fresh weather data.",
+            "checkConnection": "Please check your connection.",
+            "shareLocationPrompt": "Share location to see local weather.",
+            "offline": "Offline. Last updated",
+            "tempHighLow": "High / Low",
+            "humidity": "Humidity",
+            "wind": "Wind",
+            "sunrise": "Sunrise",
+            "sunset": "Sunset"
+        },
+        "soilHealth": {
+            "title": "Soil Health",
+            "description": "Key nutrient levels",
+            "nitrogen": "Nitrogen (N)",
+            "phosphorus": "Phosphorus (P)",
+            "potassium": "Potassium (K)",
+            "phLevel": "pH Level",
+            "optimal": "Optimal",
+            "slightlyLow": "Slightly Low"
+        },
+        "weatherAlert": {
+            "title": "Weather Alert: Heavy Rain Expected",
+            "description": "Heavy rainfall (80mm) is forecast for your region in the next 24 hours.",
+            "reasonTitle": "Why it matters for your farm:",
+            "reasonDescription": "Heavy rain after harvest can affect drying and storage."
+        },
+        "cropRecommendations": {
+            "title": "Personalized Crop Recommendations",
+            "description": "Get AI-powered suggestions for your next planting season based on your farm's data.",
+            "button": "Get Recommendations"
+        },
+        "advisoryServices": {
+            "title": "Advisory Services",
+            "description": "Connect with government schemes and private agricultural platforms for holistic support.",
+            "button": "Explore Services"
+        }
+    },
+    "recommendations": {
+        "title": "Crop Recommendations",
+        "description": "Leverage AI to discover the most suitable crops for your farm.",
+        "form": {
+            "title": "Find the Perfect Crops",
+            "description": "Enter your farm's details below to receive AI-powered crop recommendations. The more detail you provide, the better the results.",
+            "soilDataLabel": "Soil Data",
+            "soilDataPlaceholder": "e.g., pH: 6.5, Nitrogen: 50kg/ha, Phosphorus: 20kg/ha, Organic Matter: 2.5%, Soil Type: Loamy",
+            "climateDataLabel": "Climate Data",
+            "climateDataPlaceholder": "e.g., Avg. annual rainfall: 700mm, Avg. temperature: 25°C, Sunlight: 8 hours/day",
+            "locationLabel": "Location",
+            "locationPlaceholder": "e.g., Pune, Maharashtra, India",
+            "button": "Get Recommendations",
+            "resultsTitle": "Your Personalized Recommendations",
+            "recommendedCropsTitle": "Recommended Crops",
+            "soilImprovementTitle": "Soil Improvement Tips",
+            "plantingCalendarTitle": "Planting Calendar",
+            "error": "Error"
+        }
+    },
+    "soilHealthPage": {
+        "title": "Soil Health Monitoring",
+        "description": "Understand your soil's health and get AI-powered tips to improve it.",
+        "form": {
+            "title": "Soil Health Analysis",
+            "description": "Input your soil test results to get a detailed health report and improvement tips.",
+            "soilTestResultsLabel": "Soil Test Results",
+            "soilTestResultsPlaceholder": "e.g., pH: 6.5, Nitrogen: 50kg/ha, Phosphorus: 20kg/ha, Organic Matter: 2.5%",
+            "locationLabel": "Location",
+            "locationPlaceholder": "e.g., Pune, Maharashtra, India",
+            "climateDataLabel": "Climate Data (Optional)",
+            "climateDataPlaceholder": "Leave blank to use average data for your location.",
+            "button": "Analyze Soil Health",
+            "reportTitle": "Your Soil Health Report",
+            "overallHealthTitle": "Overall Soil Health",
+            "ratingPrefix": "Your soil health is rated as",
+            "ratingSuffix": ".",
+            "poor": "Poor",
+            "fair": "Fair",
+            "good": "Good",
+            "excellent": "Excellent",
+            "recommendationsTitle": "Soil Improvement Recommendations",
+            "error": "Error"
+        }
+    },
+    "weatherPage": {
+        "title": "Weather Forecast",
+        "description": "7-day forecast for {location}",
+        "descriptionNoLocation": "7-day forecast. Share your location for local weather.",
+        "currentConditions": "Current Conditions",
+        "loading": "Fetching weather for your location...",
+        "error": "Could not fetch fresh weather data.",
+        "checkConnection": "Please check your connection.",
+        "shareLocationPrompt": "Share your location on the dashboard to see local weather conditions.",
+        "offline": "Offline. Last updated",
+        "weeklyForecast": "Weekly Forecast",
+        "day": "Day",
+        "condition": "Condition",
+        "highLow": "High / Low",
+        "today": "Today"
+    },
+    "advisories": {
+        "title": "Advisory Services",
+        "description": "Connect with integrated government and private agricultural platforms.",
+        "visitPlatform": "Visit Platform",
+        "kisanSuvidha": {
+            "title": "Kisan Suvidha",
+            "description": "A government platform providing information on weather, dealers, market prices, and plant protection."
+        },
+        "mkisan": {
+            "title": "mKisan",
+            "description": "An SMS portal for farmers that provides advisories and information from various agricultural departments."
+        },
+        "farmonaut": {
+            "title": "Farmonaut",
+            "description": "A private platform using satellite imagery to provide farm-level advisories and monitoring."
+        },
+        "agriapp": {
+            "title": "AgriApp",
+            "description": "A comprehensive app offering crop advisory, soil testing, and an marketplace for agri-products."
+        }
+    },
+    "geofencing": {
+        "title": "Geofencing",
+        "description": "Define and manage virtual boundaries for your farm areas. Draw a polygon to analyze an area.",
+        "createFence": "Create New Fence",
+        "mapTitle": "Interactive Farm Map",
+        "mapDescription": "A visual overview of your farm. Use the tools on the left to draw a new geofenced area.",
+        "lulcTitle": "Bhuvan LULC Data",
+        "lulcDescription": "Draw a polygon on the map to get Land Use Land Cover data for that area.",
+        "soilTitle": "SoilGrids Data",
+        "soilDescription": "Draw a polygon on the map to get SoilGrids data for that area.",
+        "definedFences": "Defined Fences",
+        "currentCrop": "Current Crop"
+    },
+    "marketplace": {
+        "title": "Marketplace",
+        "description": "View live agricultural market rates from various APMCs across India.",
+        "filterTitle": "Filter Markets",
+        "filterDescription": "Select a state to view market prices. You can then filter by district and date.",
+        "stateLabel": "State",
+        "statePlaceholder": "Select a state",
+        "districtLabel": "District",
+        "districtPlaceholder": "Select a district",
+        "allDistricts": "All Districts",
+        "dateLabel": "Date",
+        "datePlaceholder": "Pick a date",
+        "livePricesTitle": "Live Market Prices",
+        "livePricesDescription": "Showing data for {location} on {date}",
+        "livePricesDescriptionNoDate": "Showing data for {location} on latest available date",
+        "livePricesDescriptionNoState": "Select a state to see prices.",
+        "loading": "Loading market data...",
+        "error": "Failed to fetch market data. You may be offline. Please check your connection and try again.",
+        "noData": "No recent market data available for the selected area and date.",
+        "crop": "Crop",
+        "market": "Market",
+        "price": "Price (₹ per Quintal)",
+        "priceTrendTitle": "Wheat Price Trend",
+        "priceTrendDescription": "Nashik APMC - Last 6 Months (Placeholder)"
+    },
+    "assistant": {
+        "title": "KrishiMitra Assistant",
+        "welcome": "Ask me anything about your farm!",
+        "placeholder": "Ask me anything about your farm...",
+        "micDenied": "Microphone access denied. Please enable it in your browser settings.",
+        "error": "Sorry, I had trouble responding. Please try again.",
+        "starterQuestions": "Try asking:",
+        "starter1": "What's the weather forecast for today and the next few days?",
+        "starter2": "Is it time to apply fertilizer?",
+        "starter3": "Which fertilizer should I use now?",
+        "starter4": "Are there any new weeds I need to worry about?"
+    },
+    "appShell": {
+        "searchPlaceholder": "Search...",
+        "aiAssistant": "AI Assistant",
+        "notifications": "Notifications",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout"
+    }
+}

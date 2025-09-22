@@ -1,39 +1,43 @@
+
+'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "@/hooks/use-translation";
 
 const advisoryServices = [
     {
         id: 'kisan-suvidha',
-        title: 'Kisan Suvidha',
-        description: 'A government platform providing information on weather, dealers, market prices, and plant protection.',
+        titleKey: 'advisories.kisanSuvidha.title',
+        descriptionKey: 'advisories.kisanSuvidha.description',
         href: '#',
     },
     {
         id: 'mkisan',
-        title: 'mKisan',
-        description: 'An SMS portal for farmers that provides advisories and information from various agricultural departments.',
+        titleKey: 'advisories.mkisan.title',
+        descriptionKey: 'advisories.mkisan.description',
         href: '#',
     },
     {
         id: 'farmonaut',
-        title: 'Farmonaut',
-        description: 'A private platform using satellite imagery to provide farm-level advisories and monitoring.',
+        titleKey: 'advisories.farmonaut.title',
+        descriptionKey: 'advisories.farmonaut.description',
         href: '#',
     },
     {
         id: 'agriapp',
-        title: 'AgriApp',
-        description: 'A comprehensive app offering crop advisory, soil testing, and an marketplace for agri-products.',
+        titleKey: 'advisories.agriapp.title',
+        descriptionKey: 'advisories.agriapp.description',
         href: '#',
     },
 ]
 
 function AdvisoryCard({ serviceId, title, description, href }: { serviceId: string, title: string, description: string, href: string }) {
     const image = PlaceHolderImages.find(img => img.id === serviceId);
+    const { t } = useTranslation();
 
     return (
         <Card className="flex flex-col overflow-hidden">
@@ -55,7 +59,7 @@ function AdvisoryCard({ serviceId, title, description, href }: { serviceId: stri
             <CardFooter className="mt-auto">
                 <Button asChild variant="secondary" className="w-full">
                     <Link href={href} target="_blank">
-                        Visit Platform <ArrowUpRight className="ml-2 h-4 w-4" />
+                        {t('advisories.visitPlatform')} <ArrowUpRight className="ml-2 h-4 w-4" />
                     </Link>
                 </Button>
             </CardFooter>
@@ -64,12 +68,14 @@ function AdvisoryCard({ serviceId, title, description, href }: { serviceId: stri
 }
 
 export default function AdvisoriesPage() {
+    const { t } = useTranslation();
+
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Advisory Services</h1>
+                <h1 className="text-3xl font-bold font-headline">{t('advisories.title')}</h1>
                 <p className="text-muted-foreground">
-                    Connect with integrated government and private agricultural platforms.
+                    {t('advisories.description')}
                 </p>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -77,8 +83,8 @@ export default function AdvisoriesPage() {
                     <AdvisoryCard 
                         key={service.id}
                         serviceId={service.id}
-                        title={service.title}
-                        description={service.description}
+                        title={t(service.titleKey)}
+                        description={t(service.descriptionKey)}
                         href={service.href}
                     />
                 ))}

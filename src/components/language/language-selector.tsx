@@ -3,7 +3,6 @@
 
 import { useLanguageStore, Language } from "@/lib/language-store";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { List, ListItem } from "../ui/list";
 import { Tractor } from "lucide-react";
 import { Button } from "../ui/button";
 

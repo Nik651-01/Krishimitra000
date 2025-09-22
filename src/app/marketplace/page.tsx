@@ -1,3 +1,4 @@
+
 'use client';
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/date-picker";
 import { format, parse } from 'date-fns';
+import { useTranslation } from "@/hooks/use-translation";
 
 const indianStates: Record<string, string[]> = {
   "Andaman and Nicobar Islands": ["Nicobars", "North and Middle Andaman", "South Andaman"],
@@ -78,6 +80,7 @@ export default function MarketplacePage() {
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     const handleStateChange = async (state: string) => {
         setSelectedState(state);
@@ -105,7 +108,7 @@ export default function MarketplacePage() {
             }
 
         } catch (e) {
-            setError("Failed to fetch market data. You may be offline. Please check your connection and try again.");
+            setError(t('marketplace.error'));
             console.error(e);
         } finally {
             setLoading(false);
@@ -138,28 +141,43 @@ export default function MarketplacePage() {
 
     }, [marketData, selectedDistrict, selectedDate, selectedState]);
 
+    const livePricesDescription = () => {
+        if (!selectedState) {
+            return t('marketplace.livePricesDescriptionNoState');
+        }
+        if (selectedDate) {
+            return t('marketplace.livePricesDescription', {
+                location: selectedDistrict || selectedState,
+                date: format(selectedDate, 'PPP')
+            });
+        }
+        return t('marketplace.livePricesDescriptionNoDate', {
+            location: selectedDistrict || selectedState
+        });
+    }
+
 
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Marketplace</h1>
+                <h1 className="text-3xl font-bold font-headline">{t('marketplace.title')}</h1>
                 <p className="text-muted-foreground">
-                    View live agricultural market rates from various APMCs across India.
+                    {t('marketplace.description')}
                 </p>
             </div>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Filter Markets</CardTitle>
-                    <CardDescription>Select a state to view market prices. You can then filter by district and date.</CardDescription>
+                    <CardTitle>{t('marketplace.filterTitle')}</CardTitle>
+                    <CardDescription>{t('marketplace.filterDescription')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid md:grid-cols-3 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="state-select">State</Label>
+                            <Label htmlFor="state-select">{t('marketplace.stateLabel')}</Label>
                             <Select onValueChange={handleStateChange} value={selectedState || ""}>
                                 <SelectTrigger id="state-select">
-                                    <SelectValue placeholder="Select a state" />
+                                    <SelectValue placeholder={t('marketplace.statePlaceholder')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {states.map(state => (
@@ -169,13 +187,13 @@ export default function MarketplacePage() {
                             </Select>
                         </div>
                         <div className="space-y-2">
-                             <Label htmlFor="district-select">District</Label>
+                             <Label htmlFor="district-select">{t('marketplace.districtLabel')}</Label>
                             <Select onValueChange={handleDistrictChange} value={selectedDistrict || "All"} disabled={!selectedState || districts.length === 0}>
                                 <SelectTrigger id="district-select">
-                                    <SelectValue placeholder="Select a district" />
+                                    <SelectValue placeholder={t('marketplace.districtPlaceholder')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="All">All Districts</SelectItem>
+                                    <SelectItem value="All">{t('marketplace.allDistricts')}</SelectItem>
                                     {districts.map(district => (
                                         <SelectItem key={district} value={district}>{district}</SelectItem>
                                     ))}
@@ -183,7 +201,7 @@ export default function MarketplacePage() {
                             </Select>
                         </div>
                          <div className="space-y-2">
-                            <Label htmlFor="date-select">Date</Label>
+                            <Label htmlFor="date-select">{t('marketplace.dateLabel')}</Label>
                            <DatePicker date={selectedDate} setDate={handleDateChange} disabled={!selectedState} />
                         </div>
                     </div>
@@ -194,16 +212,16 @@ export default function MarketplacePage() {
                 <div className="lg:col-span-2">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Live Market Prices</CardTitle>
+                            <CardTitle>{t('marketplace.livePricesTitle')}</CardTitle>
                              <CardDescription>
-                                {selectedState ? `Showing data for ${selectedDistrict || selectedState} on ${selectedDate ? format(selectedDate, 'PPP') : 'latest available date'}` : "Select a state to see prices."}
+                                {livePricesDescription()}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                              {loading && (
                                 <div className="flex items-center justify-center h-64">
                                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                                    <p className="ml-4 text-muted-foreground">Loading market data...</p>
+                                    <p className="ml-4 text-muted-foreground">{t('marketplace.loading')}</p>
                                 </div>
                             )}
                             {error && <p className="text-destructive text-center py-4">{error}</p>}
@@ -211,16 +229,16 @@ export default function MarketplacePage() {
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead>Crop</TableHead>
-                                            <TableHead>Market</TableHead>
-                                            <TableHead className="text-right">Price (₹ per Quintal)</TableHead>
+                                            <TableHead>{t('marketplace.crop')}</TableHead>
+                                            <TableHead>{t('marketplace.market')}</TableHead>
+                                            <TableHead className="text-right">{t('marketplace.price')}</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {filteredMarketData.length === 0 && selectedState && !error && (
                                             <TableRow>
                                                 <TableCell colSpan={3} className="text-center text-muted-foreground h-24">
-                                                    No recent market data available for the selected area and date.
+                                                    {t('marketplace.noData')}
                                                 </TableCell>
                                             </TableRow>
                                         )}
@@ -245,8 +263,8 @@ export default function MarketplacePage() {
                  <div className="lg:col-span-1">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Wheat Price Trend</CardTitle>
-                            <CardDescription>Nashik APMC - Last 6 Months (Placeholder)</CardDescription>
+                            <CardTitle>{t('marketplace.priceTrendTitle')}</CardTitle>
+                            <CardDescription>{t('marketplace.priceTrendDescription')}</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <ChartContainer config={chartConfig} className="w-full h-[250px]">

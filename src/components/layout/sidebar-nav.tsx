@@ -6,30 +6,31 @@ import Link from 'next/link';
 import { Home, Leaf, TestTube2, CloudSun, BookOpen, MapPin, ShoppingCart, Sparkles } from 'lucide-react';
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { AssistantDialog } from '../assistant/assistant-dialog';
-import { Button } from '../ui/button';
+import { useTranslation } from '@/hooks/use-translation';
 
 const navItems = [
-    { href: '/', icon: Home, label: 'Dashboard' },
-    { href: '/recommendations', icon: Leaf, label: 'Crop Recommendations' },
-    { href: '/soil-health', icon: TestTube2, label: 'Soil Health' },
-    { href: '/weather', icon: CloudSun, label: 'Weather' },
-    { href: '/advisories', icon: BookOpen, label: 'Advisory Services' },
-    { href: '/geofencing', icon: MapPin, label: 'Geofencing' },
-    { href: '/marketplace', icon: ShoppingCart, label: 'Marketplace' },
+    { href: '/', icon: Home, labelKey: 'nav.dashboard' },
+    { href: '/recommendations', icon: Leaf, labelKey: 'nav.cropRecommendations' },
+    { href: '/soil-health', icon: TestTube2, labelKey: 'nav.soilHealth' },
+    { href: '/weather', icon: CloudSun, labelKey: 'nav.weather' },
+    { href: '/advisories', icon: BookOpen, labelKey: 'nav.advisoryServices' },
+    { href: '/geofencing', icon: MapPin, labelKey: 'nav.geofencing' },
+    { href: '/marketplace', icon: ShoppingCart, labelKey: 'nav.marketplace' },
 ];
 
 export function SidebarNav() {
     const pathname = usePathname();
+    const { t } = useTranslation();
 
     return (
         <div className="flex flex-col h-full">
             <SidebarMenu className="flex-1">
                 {navItems.map((item) => (
-                    <SidebarMenuItem key={item.label}>
+                    <SidebarMenuItem key={item.labelKey}>
                         <SidebarMenuButton asChild isActive={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))}>
                             <Link href={item.href}>
                                 <item.icon />
-                                <span>{item.label}</span>
+                                <span>{t(item.labelKey)}</span>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -40,7 +41,7 @@ export function SidebarNav() {
                     <AssistantDialog>
                         <SidebarMenuButton>
                             <Sparkles />
-                            <span>AI Assistant</span>
+                            <span>{t('nav.aiAssistant')}</span>
                         </SidebarMenuButton>
                     </AssistantDialog>
                 </SidebarMenuItem>
