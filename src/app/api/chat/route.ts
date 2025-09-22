@@ -3,7 +3,7 @@
  */
 import {NextRequest, NextResponse} from 'next/server';
 import {Message, streamToResponse, StreamingTextResponse} from 'ai';
-import { chat } from '@/ai/flows/chat-assistant';
+import { chat } from '@/ai/flows/chat';
 
 export const runtime = 'edge';
 
