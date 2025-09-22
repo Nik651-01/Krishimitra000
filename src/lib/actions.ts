@@ -1,15 +1,16 @@
 'use server';
 
+import { analyzeSoilHealth } from "@/ai/flows/analyze-soil-health";
 import { personalizedCropRecommendations } from "@/ai/flows/personalized-crop-recommendations";
 import { z } from "zod";
 
-const FormSchema = z.object({
+const CropFormSchema = z.object({
     soilData: z.string().min(10, { message: "Please provide more detailed soil data." }),
     climateData: z.string().min(10, { message: "Please provide more detailed climate data." }),
     location: z.string().min(3, { message: "Please provide a valid location." }),
 });
 
-export type State = {
+export type CropRecState = {
     errors?: {
         soilData?: string[];
         climateData?: string[];
@@ -19,8 +20,8 @@ export type State = {
     data?: Awaited<ReturnType<typeof personalizedCropRecommendations>> | null;
 };
 
-export async function getCropRecommendations(prevState: State, formData: FormData) {
-    const validatedFields = FormSchema.safeParse({
+export async function getCropRecommendations(prevState: CropRecState, formData: FormData): Promise<CropRecState> {
+    const validatedFields = CropFormSchema.safeParse({
         soilData: formData.get('soilData'),
         climateData: formData.get('climateData'),
         location: formData.get('location'),
@@ -42,8 +43,61 @@ export async function getCropRecommendations(prevState: State, formData: FormDat
             errors: {},
         }
     } catch (error) {
+        console.error(error);
         return {
             message: 'Failed to get recommendations from AI. Please try again later.',
+            data: null,
+            errors: {},
+        }
+    }
+}
+
+
+const SoilHealthFormSchema = z.object({
+    soilData: z.string().min(10, { message: "Please provide more detailed soil data." }),
+    location: z.string().min(3, { message: "Please provide a valid location." }),
+});
+
+export type SoilHealthState = {
+    errors?: {
+        soilData?: string[];
+        location?: string[];
+    };
+    message?: string | null;
+    data?: Awaited<ReturnType<typeof analyzeSoilHealth>> | null;
+};
+
+
+export async function getSoilHealthAnalysis(prevState: SoilHealthState, formData: FormData): Promise<SoilHealthState> {
+    const validatedFields = SoilHealthFormSchema.safeParse({
+        soilData: formData.get('soilData'),
+        location: formData.get('location'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Invalid input. Please check the fields.',
+            data: null,
+        };
+    }
+    
+    const climateData = formData.get('climateData')?.toString() || 'Average regional climate conditions for the specified location.';
+
+    try {
+        const result = await analyzeSoilHealth({
+            ...validatedFields.data,
+            climateData: climateData,
+        });
+        return {
+            message: 'Successfully generated soil health analysis.',
+            data: result,
+            errors: {},
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            message: 'Failed to get soil health analysis from AI. Please try again later.',
             data: null,
             errors: {},
         }

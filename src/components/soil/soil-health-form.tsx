@@ -1,13 +1,15 @@
 'use client';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { getCropRecommendations, State } from '@/lib/actions';
+import { getSoilHealthAnalysis, SoilHealthState } from '@/lib/actions';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2, Sprout } from 'lucide-react';
 import { Textarea } from '../ui/textarea';
+import { Progress } from '../ui/progress';
+import { GaugeCircle } from 'lucide-react';
 
 function SubmitButton() {
     const { pending } = useFormStatus();
@@ -19,18 +21,8 @@ function SubmitButton() {
     );
 }
 
-// Wrapper action to provide default climate data if it's empty
-async function getSoilHealthAnalysis(prevState: State, formData: FormData) {
-    const climateData = formData.get('climateData');
-    if (!climateData || climateData.toString().trim() === '') {
-        formData.set('climateData', 'Average regional climate conditions for the specified location.');
-    }
-    return getCropRecommendations(prevState, formData);
-}
-
-
 export function SoilHealthForm() {
-    const initialState: State = { message: null, errors: {}, data: null };
+    const initialState: SoilHealthState = { message: null, errors: {}, data: null };
     const [state, dispatch] = useActionState(getSoilHealthAnalysis, initialState);
 
     return (
@@ -88,10 +80,34 @@ export function SoilHealthForm() {
                     <h2 className="text-2xl font-bold font-headline">Your Soil Health Report</h2>
                     <Card>
                         <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><GaugeCircle className="text-primary"/> Overall Soil Health</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center gap-4">
+                                <div className="text-4xl font-bold">{state.data.healthScore}<span className="text-2xl text-muted-foreground">/100</span></div>
+                                <div className="w-full">
+                                    <div className="flex justify-between text-sm text-muted-foreground mb-1">
+                                        <span>Poor</span>
+                                        <span>Fair</span>
+                                        <span>Good</span>
+                                        <span>Excellent</span>
+                                    </div>
+                                    <Progress value={state.data.healthScore} className="h-4" />
+                                     <div className="relative w-full h-1 mt-1">
+                                        <div className="absolute h-full w-[2px] bg-foreground" style={{left: '75%'}}></div>
+                                        <p className="absolute text-xs -translate-x-1/2" style={{left: '75%'}}>Good</p>
+                                    </div>
+                                </div>
+                            </div>
+                             <p className="text-center text-lg">Your soil health is rated as <span className="font-semibold text-primary">{state.data.rating}</span>.</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
                             <CardTitle className="flex items-center gap-2"><Sprout className="text-primary"/> Soil Improvement Recommendations</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="whitespace-pre-wrap">{state.data.soilImprovementTips}</p>
+                            <p className="whitespace-pre-wrap">{state.data.recommendations}</p>
                         </CardContent>
                     </Card>
                 </div>

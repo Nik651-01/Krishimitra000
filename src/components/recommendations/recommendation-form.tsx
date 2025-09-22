@@ -1,7 +1,7 @@
 'use client';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { getCropRecommendations, State } from '@/lib/actions';
+import { getCropRecommendations, CropRecState } from '@/lib/actions';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -20,7 +20,7 @@ function SubmitButton() {
 }
 
 export function RecommendationForm() {
-    const initialState: State = { message: null, errors: {}, data: null };
+    const initialState: CropRecState = { message: null, errors: {}, data: null };
     const [state, dispatch] = useActionState(getCropRecommendations, initialState);
 
     return (
