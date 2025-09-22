@@ -43,7 +43,7 @@ const getMarketPricesFlow = ai.defineFlow(
     }
     
     const resourceId = '9ef84268-d588-465a-a308-a864a43d0070';
-    const limit = 20;
+    const limit = 1000;
     const url = `https://api.data.gov.in/resource/${resourceId}?api-key=${apiKey}&format=json&limit=${limit}`;
 
     try {
