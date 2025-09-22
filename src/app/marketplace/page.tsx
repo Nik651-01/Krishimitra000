@@ -9,6 +9,8 @@ import { getMarketPrices, MarketPriceRecord } from "@/ai/flows/get-market-prices
 import { Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/ui/date-picker";
+import { format, parse } from 'date-fns';
 
 const indianStates: Record<string, string[]> = {
   "Andaman and Nicobar Islands": ["Nicobars", "North and Middle Andaman", "South Andaman"],
@@ -73,12 +75,15 @@ export default function MarketplacePage() {
     const [districts, setDistricts] = useState<string[]>([]);
     const [selectedState, setSelectedState] = useState<string | null>(null);
     const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const handleStateChange = async (state: string) => {
         setSelectedState(state);
         setSelectedDistrict(null);
+        setSelectedDate(undefined);
+        setMarketData([]);
         setFilteredMarketData([]);
         setDistricts(indianStates[state as keyof typeof indianStates] || []);
         
@@ -87,7 +92,16 @@ export default function MarketplacePage() {
             setError(null);
             const data = await getMarketPrices({ state });
             setMarketData(data.records);
-            setFilteredMarketData(data.records);
+
+            // Auto-select latest date with data
+            if (data.records.length > 0) {
+                const latestDate = data.records.reduce((latest, record) => {
+                    const recordDate = parse(record.arrival_date, 'dd/MM/yyyy', new Date());
+                    return recordDate > latest ? recordDate : latest;
+                }, new Date(0));
+                setSelectedDate(latestDate);
+            }
+
         } catch (e) {
             setError("Failed to fetch market data. Please try again later.");
             console.error(e);
@@ -98,11 +112,29 @@ export default function MarketplacePage() {
 
     const handleDistrictChange = (district: string) => {
         setSelectedDistrict(district);
-        if (selectedState) {
-             const filtered = marketData.filter(record => record.district === district);
-            setFilteredMarketData(filtered);
-        }
     };
+
+    const handleDateChange = (date: Date | undefined) => {
+        setSelectedDate(date);
+    }
+    
+    useEffect(() => {
+        if (!selectedState) return;
+
+        let filtered = marketData;
+
+        if(selectedDistrict) {
+            filtered = filtered.filter(record => record.district === selectedDistrict);
+        }
+
+        if(selectedDate) {
+            const formattedDate = format(selectedDate, 'dd/MM/yyyy');
+            filtered = filtered.filter(record => record.arrival_date === formattedDate);
+        }
+
+        setFilteredMarketData(filtered);
+
+    }, [marketData, selectedDistrict, selectedDate, selectedState]);
 
 
     return (
@@ -117,10 +149,10 @@ export default function MarketplacePage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Filter Markets</CardTitle>
-                    <CardDescription>Select a state and district to narrow down results.</CardDescription>
+                    <CardDescription>Select a state, district, and date to narrow down results.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid md:grid-cols-3 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="state-select">State</Label>
                             <Select onValueChange={handleStateChange} value={selectedState || ""}>
@@ -147,6 +179,10 @@ export default function MarketplacePage() {
                                 </SelectContent>
                             </Select>
                         </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="date-select">Date</Label>
+                           <DatePicker date={selectedDate} setDate={handleDateChange} disabled={!selectedState} />
+                        </div>
                     </div>
                 </CardContent>
             </Card>
@@ -157,7 +193,7 @@ export default function MarketplacePage() {
                         <CardHeader>
                             <CardTitle>Live Market Prices</CardTitle>
                              <CardDescription>
-                                {selectedState ? `Latest prices for ${selectedDistrict || selectedState}` : "Select a state to see prices."}
+                                {selectedState ? `Showing data for ${selectedDistrict || selectedState} on ${selectedDate ? format(selectedDate, 'PPP') : 'latest date'}` : "Select a state to see prices."}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -181,7 +217,7 @@ export default function MarketplacePage() {
                                         {filteredMarketData.length === 0 && selectedState && (
                                             <TableRow>
                                                 <TableCell colSpan={3} className="text-center text-muted-foreground">
-                                                    No recent market data available for the selected area.
+                                                    No recent market data available for the selected area and date.
                                                 </TableCell>
                                             </TableRow>
                                         )}
