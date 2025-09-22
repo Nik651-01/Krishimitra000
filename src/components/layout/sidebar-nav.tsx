@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Leaf, TestTube2, CloudSun, BookOpen } from 'lucide-react';
+import { Home, Leaf, TestTube2, CloudSun, BookOpen, Bot } from 'lucide-react';
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 
 const navItems = [
@@ -11,6 +11,7 @@ const navItems = [
     { href: '/soil-health', icon: TestTube2, label: 'Soil Health' },
     { href: '/weather', icon: CloudSun, label: 'Weather' },
     { href: '/advisories', icon: BookOpen, label: 'Advisory Services' },
+    { href: '/assistant', icon: Bot, label: 'AI Assistant' },
 ];
 
 export function SidebarNav() {

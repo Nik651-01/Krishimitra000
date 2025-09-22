@@ -3,6 +3,7 @@
  */
 import {NextRequest, NextResponse} from 'next/server';
 import {Message, streamToResponse, StreamingTextResponse} from 'ai';
+import { chat, ChatInput } from '@/ai/flows/chat';
 
 export const runtime = 'edge';
 
@@ -13,17 +14,13 @@ export async function POST(req: NextRequest) {
     ...rest
   }: {messages: Message[]; flow: string; [key: string]: any} = await req.json();
 
-  const flowName = flow.endsWith('.ts') ? flow.slice(0, -3) : flow;
-  const flowFn = (await import(`@/ai/flows/${flowName}`))[flowName];
-
   try {
-    const stream = await flowFn({
+    const stream = await chat({
       history: messages.map(m => ({
-        role: m.role,
+        role: m.role as 'user' | 'model',
         content: [{text: m.content}],
       })),
-      message: messages.findLast(m => m.role === 'user')?.content,
-      ...rest,
+      message: messages.findLast(m => m.role === 'user')?.content ?? '',
     });
     return new StreamingTextResponse(stream);
   } catch (err: any) {

@@ -5,15 +5,15 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'zod';
 
-const ChatAssistantInputSchema = z.object({
+const ChatInputSchema = z.object({
   history: z
     .array(z.object({role: z.enum(['user', 'model']), content: z.array(z.object({text: z.string()}))}))
     .describe('The chat history.'),
   message: z.string().describe('The user message.'),
 });
-export type ChatAssistantInput = z.infer<typeof ChatAssistantInputSchema>;
+export type ChatInput = z.infer<typeof ChatInputSchema>;
 
-export async function chatAssistant(input: ChatAssistantInput) {
+export async function chat(input: ChatInput) {
   const {stream} = await ai.generate({
     model: 'googleai/gemini-2.5-flash',
     prompt: [

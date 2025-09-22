@@ -4,7 +4,7 @@ import { useChat } from 'ai/react';
 import { Bot, Mic, User } from 'lucide-react';
 import { FormEvent, useRef } from 'react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -26,7 +26,7 @@ export function Assistant() {
   } = useChat({
     api: '/api/chat',
     body: {
-        flow: 'chatAssistant',
+        flow: 'chat',
     }
   });
   const formRef = useRef<HTMLFormElement>(null);
