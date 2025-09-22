@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -30,7 +30,7 @@ const SpeechRecognition =
       (window as any).webkitSpeechRecognition)) ||
   null;
 
-export function AssistantDialog() {
+export function AssistantDialog({children}: {children: ReactNode}) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -145,10 +145,7 @@ export function AssistantDialog() {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="default" size="icon" className="rounded-full h-10 w-10 shadow-lg">
-          <Mic />
-          <span className="sr-only">Open AI Assistant</span>
-        </Button>
+        {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] md:max-w-lg grid-rows-[auto_1fr_auto] max-h-[90vh] p-0">
         <DialogHeader className="p-4 border-b">
