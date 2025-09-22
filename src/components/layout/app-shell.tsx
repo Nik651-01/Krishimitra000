@@ -4,7 +4,7 @@ import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarInset, 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bell, Search, Tractor } from "lucide-react";
+import { Bell, Search, Sparkles, Tractor } from "lucide-react";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarNav } from "./sidebar-nav";
@@ -44,6 +44,12 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
                     </div>
 
                     <div className="flex items-center gap-2">
+                        <AssistantDialog>
+                            <Button variant="ghost" size="icon">
+                                <Sparkles className="h-5 w-5" />
+                                <span className="sr-only">AI Assistant</span>
+                            </Button>
+                        </AssistantDialog>
                         <Button variant="ghost" size="icon">
                             <Bell className="h-5 w-5" />
                              <span className="sr-only">Notifications</span>
