@@ -140,7 +140,7 @@ export default function MarketplacePage() {
                                         <TableRow>
                                             <TableHead>Crop</TableHead>
                                             <TableHead>Market</TableHead>
-                                            <TableHead className="text-right">Price (Modal)</TableHead>
+                                            <TableHead className="text-right">Price (₹ per Quintal)</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
