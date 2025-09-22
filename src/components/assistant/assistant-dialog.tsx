@@ -25,10 +25,10 @@ interface Message {
 }
 
 const starterQuestions = [
-    "What's the weather today?",
-    "Analyze my soil health",
+    "What's the weather forecast?",
+    "Which fertilizer should I use now?",
+    "How do I control new weeds?",
     "Recommend a crop to plant",
-    "What are current wheat prices in Maharashtra?"
 ]
 
 // Check for SpeechRecognition API
