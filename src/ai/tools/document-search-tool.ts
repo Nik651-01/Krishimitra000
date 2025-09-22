@@ -20,6 +20,18 @@ const simulatedVectorDB = [
     {
         content: "Crop rotation is a critical practice for maintaining soil health. After harvesting a nitrogen-depleting crop like wheat, it is advisable to plant a nitrogen-fixing legume such as gram (chana) or lentil (masoor).",
         metadata: { source: 'Sustainable Farming Practices.pdf', page: 7 }
+    },
+    {
+        content: "What does NPK stand for? NPK stands for Nitrogen (N), Phosphorus (P), and Potassium (K). These are the three most important macronutrients that plants need to grow. Nitrogen is for leaf growth, Phosphorus is for root/flower/fruit development, and Potassium is for overall plant health.",
+        metadata: { source: 'Farming Basics.pdf', page: 2 }
+    },
+    {
+        content: "What is the purpose of crop rotation? The main purpose is to maintain soil health, reduce soil erosion, and manage pests and weeds. Planting different crops in succession prevents a buildup of specific pests and balances soil nutrient levels.",
+        metadata: { source: 'Farming Basics.pdf', page: 5 }
+    },
+    {
+        content: "How often should I irrigate my fields? Irrigation frequency depends on the crop, soil type, and weather. Sandy soils need more frequent watering than clay soils. A general rule is to check the soil moisture 5-6 inches deep. If it's dry, it's time to irrigate.",
+        metadata: { source: 'Water Management Guide.pdf', page: 12 }
     }
 ];
 
