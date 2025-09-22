@@ -6,7 +6,6 @@ import './globals.css';
 import { AppShell } from '@/components/layout/app-shell';
 import { Toaster } from '@/components/ui/toaster';
 import { useLanguageStore } from '@/lib/language-store';
-import { LanguageSelector } from '@/components/language/language-selector';
 import { Loader2 } from 'lucide-react';
 import { TranslationProvider } from '@/components/language/translation-provider';
 
@@ -29,7 +28,7 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang={language || 'en'} suppressHydrationWarning>
+    <html lang={language} suppressHydrationWarning>
       <head>
         <title>KrishiMitra</title>
         <meta name="description" content="A smart agri-advisor for Indian farmers." />
@@ -44,8 +43,6 @@ export default function RootLayout({
             <div className="flex justify-center items-center h-screen">
                 <Loader2 className="h-8 w-8 animate-spin" />
             </div>
-        ) : !language ? (
-          <LanguageSelector />
         ) : (
           <TranslationProvider>
             <AppShell>
