@@ -17,6 +17,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { useLocationStore } from '@/lib/location-store';
 import { useTranslation } from '@/hooks/use-translation';
+import { useLanguageStore } from '@/lib/language-store';
 
 interface Message {
   id: number;
@@ -40,6 +41,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
   const [error, setError] = useState<string | null>(null);
 
   const { location } = useLocationStore();
+  const { language } = useLanguageStore();
   const { t } = useTranslation();
 
   const starterQuestions = [
@@ -61,7 +63,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
     const recognition = new SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = true;
-    recognition.lang = 'en-US';
+    recognition.lang = language ? `${language}-IN` : 'en-US';
 
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
@@ -82,7 +84,7 @@ export function AssistantDialog({children}: {children: ReactNode}) {
     };
 
     recognitionRef.current = recognition;
-  }, [t]);
+  }, [t, language]);
 
   const toggleListening = () => {
     if (isListening) {
@@ -139,7 +141,8 @@ export function AssistantDialog({children}: {children: ReactNode}) {
       // Get text response
       const chatResponse = await chat({ 
         query: userMessage.text,
-        location: location || undefined
+        location: location || undefined,
+        language: language || undefined,
       });
       const botMessage: Message = {
         id: Date.now() + 1,

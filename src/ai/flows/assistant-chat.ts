@@ -26,6 +26,7 @@ const AssistantChatInputSchema = z.object({
     })
     .optional()
     .describe("The user's current GPS location."),
+  language: z.string().optional().describe("The ISO 639-1 language code for the response (e.g., 'en', 'hi')."),
 });
 export type AssistantChatInput = z.infer<typeof AssistantChatInputSchema>;
 
@@ -55,11 +56,13 @@ const prompt = ai.definePrompt({
   ],
   system: `You are KrishiMitra, a friendly and knowledgeable AI assistant for an Indian farming application.
 Your goal is to provide helpful and encouraging answers to farmers' questions.
+You MUST respond in the language specified by the 'language' input field. The available languages are: en (English), hi (Hindi), nag (Nagpuri), sat (Santhali), kru (Kurukh), mun (Mundari). If no language is specified, default to English.
+
 Your interaction style is a two-step process:
 1. First, provide a concise, direct answer to the user's immediate question. This should be a brief, helpful summary.
 2. After giving the initial answer, ALWAYS ask a relevant follow-up question to encourage the user to provide more details for a more comprehensive and personalized response. For example, if they ask about a crop, you can ask about their soil type, location, or climate.
 
-If a question is outside the scope of agriculture, politely decline to answer.
+If a question is outside the scope of agriculture, politely decline to answer in the requested language.
 
 You have access to a number of tools to help answer questions. Use them when appropriate.
 - If the user asks about weather, use the getWeatherForecastTool. If they don't specify a location, use the provided user location.
@@ -73,6 +76,9 @@ You have access to a number of tools to help answer questions. Use them when app
   prompt: `User's question: {{{query}}}
   {{#if location}}
   User's current location: Latitude {{location.latitude}}, Longitude {{location.longitude}}
+  {{/if}}
+  {{#if language}}
+  Language for response: {{language}}
   {{/if}}
   `,
 });
