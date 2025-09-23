@@ -15,6 +15,16 @@
         "title": "आपन भाषा चुना",
         "description": "आगे बढ़ेक ले एक भाषा चुना"
     },
+    "login": {
+        "title": "आपन खाता में लॉगिन करी",
+        "description": "लॉगिन करेक या मेहमान के रूप में जारी रखे ले नीचे आपन ईमेल दर्ज करी।",
+        "emailLabel": "ईमेल",
+        "emailPlaceholder": "farmer@example.com",
+        "passwordLabel": "पासवर्ड",
+        "loginButton": "ईमेल से लॉगिन करी",
+        "or": "या",
+        "guestButton": "मेहमान के रूप में जारी रखी"
+    },
     "dashboard": {
         "title": "डैशबोर्ड",
         "welcome": "फिर से स्वागत है, यहाँ तोर खेत कर अवलोकन है।",
@@ -202,8 +212,7 @@
         "notifications": "सूचना",
         "profile": "प्रोफाइल",
         "settings": "सेटिंग",
-        "logout": "लॉगआउट"
+        "logout": "लॉगआउट",
+        "guest": "मेहमान उपयोगकर्ता"
     }
 }
-
-    

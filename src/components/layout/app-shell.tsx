@@ -4,16 +4,18 @@ import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarInset, 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bell, Search, Sparkles, Tractor } from "lucide-react";
+import { Bell, Search, Sparkles, Tractor, LogOut } from "lucide-react";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarNav } from "./sidebar-nav";
 import { AssistantDialog } from "../assistant/assistant-dialog";
 import { useTranslation } from "@/hooks/use-translation";
 import { LanguageSwitcher } from "../language/language-switcher";
+import { useAuthStore } from "@/lib/auth-store";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
     const { t } = useTranslation();
+    const { user, isGuest, logout } = useAuthStore();
     
     return (
         <SidebarProvider>
@@ -27,6 +29,40 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <SidebarContent className="p-2">
                     <SidebarNav />
                 </SidebarContent>
+                 <SidebarFooter className="p-2">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="w-full justify-start gap-2 p-2 h-auto">
+                                 <Avatar className="h-9 w-9">
+                                    <AvatarImage src={isGuest ? undefined : "https://picsum.photos/seed/farmer/40/40"} data-ai-hint="farmer profile" />
+                                    <AvatarFallback>{isGuest ? 'G' : (user?.email?.charAt(0).toUpperCase() || 'F')}</AvatarFallback>
+                                </Avatar>
+                                <div className="text-left">
+                                     <p className="font-medium text-sm truncate">{isGuest ? t('appShell.guest', {defaultValue: "Guest User"}) : (user?.email || 'Farmer Kumar')}</p>
+                                     {!isGuest && <p className="text-xs text-muted-foreground font-normal truncate">{user?.email}</p>}
+                                </div>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-56" side="top" sideOffset={8}>
+                            {!isGuest && (
+                                <>
+                                    <DropdownMenuLabel>
+                                        <p className="font-medium">{user?.email || 'Farmer Kumar'}</p>
+                                        <p className="text-xs text-muted-foreground font-normal">{user?.email}</p>
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem>{t('appShell.profile')}</DropdownMenuItem>
+                                    <DropdownMenuItem>{t('appShell.settings')}</DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                </>
+                            )}
+                            <DropdownMenuItem onClick={logout}>
+                                <LogOut className="mr-2 h-4 w-4" />
+                                {t('appShell.logout')}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </SidebarFooter>
             </Sidebar>
 
             <SidebarInset>
@@ -59,27 +95,36 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                             <Bell className="h-5 w-5" />
                              <span className="sr-only">{t('appShell.notifications')}</span>
                         </Button>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                                    <Avatar className="h-9 w-9">
-                                        <AvatarImage src="https://picsum.photos/seed/farmer/40/40" data-ai-hint="farmer profile" />
-                                        <AvatarFallback>FK</AvatarFallback>
-                                    </Avatar>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-56">
-                                <DropdownMenuLabel>
-                                    <p className="font-medium">Farmer Kumar</p>
-                                    <p className="text-xs text-muted-foreground font-normal">farmer.kumar@example.com</p>
-                                </DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem>{t('appShell.profile')}</DropdownMenuItem>
-                                <DropdownMenuItem>{t('appShell.settings')}</DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem>{t('appShell.logout')}</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <div className="hidden md:block">
+                             <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                                        <Avatar className="h-9 w-9">
+                                            <AvatarImage src={isGuest ? undefined : "https://picsum.photos/seed/farmer/40/40"} data-ai-hint="farmer profile" />
+                                            <AvatarFallback>{isGuest ? 'G' : (user?.email?.charAt(0).toUpperCase() || 'F')}</AvatarFallback>
+                                        </Avatar>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-56">
+                                     {!isGuest && (
+                                        <>
+                                            <DropdownMenuLabel>
+                                                <p className="font-medium">{user?.email || 'Farmer Kumar'}</p>
+                                                <p className="text-xs text-muted-foreground font-normal">{user?.email}</p>
+                                            </DropdownMenuLabel>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem>{t('appShell.profile')}</DropdownMenuItem>
+                                            <DropdownMenuItem>{t('appShell.settings')}</DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                        </>
+                                     )}
+                                    <DropdownMenuItem onClick={logout}>
+                                         <LogOut className="mr-2 h-4 w-4" />
+                                        {t('appShell.logout')}
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
                     </div>
                 </header>
                 <main className="flex-1 p-4 md:p-6 lg:p-8">

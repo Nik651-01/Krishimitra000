@@ -15,6 +15,16 @@
         "title": "आम भाषा चयन मे",
         "description": "आगे बढ़ो ले एक भाषा चयन मे"
     },
+    "login": {
+        "title": "आम खाता रे लॉगिन मे",
+        "description": "लॉगिन ले या मेहमान के रूप में जारी रख ले नीचे आम ईमेल दर्ज मे।",
+        "emailLabel": "ईमेल",
+        "emailPlaceholder": "farmer@example.com",
+        "passwordLabel": "पासवर्ड",
+        "loginButton": "ईमेल से लॉगिन मे",
+        "or": "या",
+        "guestButton": "मेहमान के रूप में जारी रख मे"
+    },
     "dashboard": {
         "title": "डैशबोर्ड",
         "welcome": "फिर से स्वागतम्, नेया आम खेत रिया अवलोकन तना।",
@@ -202,8 +212,7 @@
         "notifications": "सूचना",
         "profile": "प्रोफाइल",
         "settings": "सेटिंग",
-        "logout": "लॉगआउट"
+        "logout": "लॉगआउट",
+        "guest": "मेहमान उपयोगकर्ता"
     }
 }
-
-    

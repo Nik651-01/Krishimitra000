@@ -15,6 +15,16 @@
         "title": "Choose Your Language",
         "description": "Select a language to continue"
     },
+    "login": {
+        "title": "Login to Your Account",
+        "description": "Enter your email below to login or continue as a guest.",
+        "emailLabel": "Email",
+        "emailPlaceholder": "farmer@example.com",
+        "passwordLabel": "Password",
+        "loginButton": "Login with Email",
+        "or": "OR",
+        "guestButton": "Continue as Guest"
+    },
     "dashboard": {
         "title": "Dashboard",
         "welcome": "Welcome back, here's your farm's overview.",
@@ -202,6 +212,7 @@
         "notifications": "Notifications",
         "profile": "Profile",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "guest": "Guest User"
     }
 }

@@ -9,6 +9,8 @@ import { useLanguageStore } from '@/lib/language-store';
 import { Loader2 } from 'lucide-react';
 import { TranslationProvider } from '@/components/language/translation-provider';
 import { LanguageSelector } from '@/components/language/language-selector';
+import { useAuthStore } from '@/lib/auth-store';
+import LoginPage from './login/page';
 
 // This metadata would ideally be dynamic based on language
 // export const metadata: Metadata = {
@@ -22,6 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { language } = useLanguageStore();
+  const { isLoggedIn, isGuest } = useAuthStore();
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export default function RootLayout({
   }, []);
 
   if (!isHydrated) {
-     return (
+    return (
       <html lang="en" suppressHydrationWarning>
         <head>
           <title>KrishiMitra</title>
@@ -43,7 +46,7 @@ export default function RootLayout({
       </html>
     );
   }
-
+  
   if (!language) {
     return (
        <html lang="en" suppressHydrationWarning>
@@ -53,6 +56,22 @@ export default function RootLayout({
          </head>
          <body>
           <LanguageSelector />
+         </body>
+       </html>
+    )
+  }
+
+  if (!isLoggedIn && !isGuest) {
+     return (
+       <html lang={language} suppressHydrationWarning>
+         <head>
+          <title>KrishiMitra - Login</title>
+          <meta name="description" content="A smart agri-advisor for Indian farmers." />
+         </head>
+         <body>
+          <TranslationProvider>
+            <LoginPage />
+          </TranslationProvider>
          </body>
        </html>
     )

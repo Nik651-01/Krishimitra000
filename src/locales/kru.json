@@ -15,6 +15,16 @@
         "title": "निमा भाषा चुनार",
         "description": "आगे बढ़ना ले एक भाषा चुनार"
     },
+    "login": {
+        "title": "निमा खाता में लॉगिन केरा",
+        "description": "लॉगिन करना या मेहमान के रूप में जारी रखना ले नीचे निमा ईमेल दर्ज केरा।",
+        "emailLabel": "ईमेल",
+        "emailPlaceholder": "farmer@example.com",
+        "passwordLabel": "पासवर्ड",
+        "loginButton": "ईमेल से लॉगिन केरा",
+        "or": "या",
+        "guestButton": "मेहमान के रूप में जारी केरा"
+    },
     "dashboard": {
         "title": "डैशबोर्ड",
         "welcome": "फिर से स्वागत है, इदे निमा खेत का अवलोकन तली।",
@@ -202,8 +212,7 @@
         "notifications": "सूचना",
         "profile": "प्रोफाइल",
         "settings": "सेटिंग",
-        "logout": "लॉगआउट"
+        "logout": "लॉगआउट",
+        "guest": "मेहमान उपयोगकर्ता"
     }
 }
-
-    
