@@ -3,7 +3,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Leaf, TestTube2, CloudSun, BookOpen, MapPin, ShoppingCart, Sparkles } from 'lucide-react';
+import { Home, Leaf, TestTube2, CloudSun, BookOpen, MapPin, ShoppingCart, Sparkles, Microscope } from 'lucide-react';
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { AssistantDialog } from '../assistant/assistant-dialog';
 import { useTranslation } from '@/hooks/use-translation';
@@ -13,6 +13,7 @@ const navItems = [
     { href: '/recommendations', icon: Leaf, labelKey: 'nav.cropRecommendations' },
     { href: '/soil-health', icon: TestTube2, labelKey: 'nav.soilHealth' },
     { href: '/weather', icon: CloudSun, labelKey: 'nav.weather' },
+    { href: '/disease-detection', icon: Microscope, labelKey: 'nav.diseaseDetection' },
     { href: '/advisories', icon: BookOpen, labelKey: 'nav.advisoryServices' },
     { href: '/geofencing', icon: MapPin, labelKey: 'nav.geofencing' },
     { href: '/marketplace', icon: ShoppingCart, labelKey: 'nav.marketplace' },

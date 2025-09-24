@@ -8,7 +8,8 @@
         "advisoryServices": "Advisory Services",
         "geofencing": "Geofencing",
         "marketplace": "Marketplace",
-        "aiAssistant": "AI Assistant"
+        "aiAssistant": "AI Assistant",
+        "diseaseDetection": "Disease Detection"
     },
     "languageSelector": {
         "welcome": "Welcome to KrishiMitra",
@@ -205,6 +206,29 @@
         "starter2": "Is it time to apply fertilizer?",
         "starter3": "Which fertilizer should I use now?",
         "starter4": "Are there any new weeds I need to worry about?"
+    },
+    "diseaseDetection": {
+        "title": "Plant Disease Detection",
+        "description": "Upload a photo of a plant leaf to get an AI-powered disease diagnosis and treatment plan.",
+        "uploadTitle": "Upload Plant Image",
+        "uploadDescription": "Choose a clear photo of the affected plant leaf for the most accurate analysis.",
+        "imageLabel": "Plant Image",
+        "buttonText": "Detect Disease",
+        "errorNoImage": "Please upload an image first.",
+        "errorAnalysis": "Sorry, there was an error analyzing the image. Please try again.",
+        "errorTitle": "Error",
+        "resultsTitle": "Analysis Results",
+        "notAPlantTitle": "Not a Plant",
+        "notAPlantDescription": "The uploaded image does not appear to contain a plant. Please upload a clear photo of a plant.",
+        "identificationTitle": "Plant Identification",
+        "commonName": "Common Name",
+        "latinName": "Latin Name",
+        "diagnosisTitle": "Diagnosis",
+        "healthStatus": "Health Status",
+        "healthy": "Healthy",
+        "unhealthy": "Unhealthy",
+        "diseaseName": "Disease/Pest",
+        "treatmentTitle": "Prevention & Treatment Recommendations"
     },
     "appShell": {
         "searchPlaceholder": "Search...",

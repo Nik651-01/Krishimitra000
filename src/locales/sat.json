@@ -8,7 +8,8 @@
         "advisoryServices": "ପରାମର୍ଶ ସେବା",
         "geofencing": "ଜିଓଫେନ୍ସିଂ",
         "marketplace": "ବଜାର",
-        "aiAssistant": "AI ᱥᱟହାଯ୍ୟକାରୀ"
+        "aiAssistant": "AI ᱥᱟହାଯ୍ୟକାରୀ",
+        "diseaseDetection": "ᱨᱚᱜᱽ ᱯᱟᱹᱨᱤᱪᱷᱟᱹ"
     },
     "languageSelector": {
         "welcome": "कृषिमित्र ᱨᱮ ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ",
@@ -17,7 +18,7 @@
     },
     "login": {
         "title": "ᱟᱢᱟᱜ ᱮᱠᱟᱣᱩᱱᱴ ᱨᱮ ᱞᱚᱜᱤᱱ ᱢᱮ",
-        "description": "ᱞᱚᱜᱤᱱ ᱞᱟᱹᱜᱤᱫ ᱥᱮ ᱢᱮᱦᱢᱟᱱ ᱞᱮᱠᱟᱛᱮ ᱡᱟᱨᱤ ᱫᱚᱦᱚ ᱞᱟᱹᱜᱤᱫ ତଳେ ᱟᱢᱟᱜ ᱤᱢେᱞ ᱚᱞ ᱢᱮ᱾",
+        "description": "ᱞᱚᱜᱤᱱ ᱞᱟᱹᱜᱤᱫ ᱥᱮ ᱢᱮᱦᱢᱟᱱ ᱞᱮᱠᱟᱛᱮ ᱡᱟᱨᱤ ᱫᱚᱦᱚ ᱞᱟᱹᱜᱤᱫ ତଳେ ᱟᱢᱟᱜ ᱤᱢେਲ ᱚᱞ ᱢᱮ᱾",
         "emailLabel": "ᱤᱢେᱞ",
         "emailPlaceholder": "farmer@example.com",
         "passwordLabel": "ᱯᱟᱥᱣਰᱰ",
@@ -133,7 +134,7 @@
         "day": "ଦିନ",
         "condition": "ସ୍ଥିତି",
         "highLow": "ᱡᱟᱹᱥᱛᱤ / ᱠᱚᱢ",
-        "today": "ᱛᱮᱦᱮᱧ"
+        "today": "ᱛᱮᱦେᱧ"
     },
     "advisories": {
         "title": "ପରାମର୍ଶ ସେବା",
@@ -149,11 +150,11 @@
         },
         "farmonaut": {
             "title": "ଫାର୍ମୋନଟ୍",
-            "description": "ଖେତ-ସ୍ତରୀୟ ପରାମର୍ଶ ᱟᱨ ତଦାରଖ ᱞᱟᱹଗᱤᱫ ଉପଗ୍ରହ ଫଟୋ ᱵ୍ୟବହାର କରୁଥିବା ᱢᱤᱫ ଘରୋଇ ᱯ୍ଲେଟଫର୍ମ।"
+            "description": "ଖେତ-ସ୍ତରୀୟ ପରାମର୍ଶ ᱟᱨ ତଦାରଖ ᱞᱟᱹଗିᱫ ଉପଗ୍ରହ ଫଟୋ ᱵ୍ୟବହାର କରୁଥିବା ᱢᱤᱫ ଘରୋଇ ᱯ୍ଲେଟଫର୍ମ।"
         },
         "agriapp": {
             "title": "AgriApp",
-            "description": "ଫସଲ ପରାମର୍ଶ, ମାଟି ପରୀକ୍ଷଣ ᱟᱨ ᱠୃଷି-ଉତ୍ପାଦ ᱞᱟᱹଗᱤᱫ ᱢᱤᱫ ବଜାର ଥିବା ᱢᱤᱫ ବ୍ୟାପକ ଆପ୍।"
+            "description": "ଫସଲ ପରାମର୍ଶ, ମାଟି ପରୀକ୍ଷଣ ᱟᱨ ᱠୃଷି-ଉତ୍ପାଦ ᱞᱟᱹଗିᱫ ᱢᱤᱫ ବଜାର ଥିବା ᱢᱤᱫ ବ୍ୟାପକ ଆପ୍।"
         }
     },
     "geofencing": {
@@ -173,14 +174,14 @@
         "title": "ବଜାର",
         "description": "ଭାରତ ᱨᱮᱭᱟᱜ ବିଭିନ୍ନ APMC ରୁ ଲାଇଭ୍ ᱠୃଷି ବଜାର ଦର ᱧᱮᱞ ᱢᱮ᱾",
         "filterTitle": "ବଜାର ᱯᱷᱤᱞᱴᅥ ᱢᱮ",
-        "filterDescription": "ବଜାର ଦର ᱧᱮᱞ ᱞᱟᱹଗᱤᱫ ᱢᱤᱫ ରାଜ୍ୟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾ ତା'ପରେ ଜିଲ୍ଲା ᱟᱨ ତାରିଖ ଅନୁସାରେ ᱯᱷᱤᱞᱴᅥ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾",
+        "filterDescription": "ବଜାର ଦର ᱧᱮᱞ ᱞᱟᱹଗᱤᱫ ᱢᱤᱫ ରାଜ୍ୟ ᱵᱟᱪᱷାᱣ ᱢᱮ᱾ ତା'ପରେ ଜିଲ୍ଲା ᱟᱨ ତାରିଖ ଅନୁସାରେ ᱯᱷᱤᱞᱴᅥ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾",
         "stateLabel": "ରାଜ୍ୟ",
-        "statePlaceholder": "ᱢᱤᱫ ରାଜ୍ୟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
+        "statePlaceholder": "ᱢᱤᱫ ରାଜ୍ୟ ᱵᱟᱪᱷାᱣ ᱢᱮ",
         "districtLabel": "ଜିଲ୍ଲା",
         "districtPlaceholder": "ᱢᱤᱫ ଜିଲ୍ଲା ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
         "allDistricts": "ସବୁ ଜିଲ୍ଲା",
         "dateLabel": "ତାରିଖ",
-        "datePlaceholder": "ᱢᱤᱫ ତାରିଖ ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
+        "datePlaceholder": "ᱢᱤᱫ ତାରିଖ ᱵᱟᱪᱷାᱣ ᱢᱮ",
         "livePricesTitle": "ଲାଇଭ୍ ବଜାର ଦର",
         "livePricesDescription": "{location} ᱞᱟᱹଗᱤᱫ {date} ᱨᱮᱭᱟᱜ ᱰᱮᱴᱟ ᱫେଖାଉଛି",
         "livePricesDescriptionNoDate": "{location} ᱞᱟᱹଗᱤᱫ ᱱᱟᱣᱟ ଉପଲବ୍ଧ ତାରିଖ ᱨେᱭᱟᱜ ᱰᱮᱴᱟ ᱫେଖାଉଛି",
@@ -191,7 +192,7 @@
         "crop": "ଫସଲ",
         "market": "ବଜାର",
         "price": "ଦର (₹ ᱯᱨᱚତି କ୍ୱିଣ୍ଟାଲ)",
-        "priceTrendTitle": "ଗହମ ଦର ᱨେᱭᱟᱜ ଧାରା",
+        "priceTrendTitle": "ଗହମ ଦର ᱨᱮᱭᱟᱜ ଧାରା",
         "priceTrendDescription": "ନାସିକ APMC - ᱯᱟᱹᱪᱷᱞᱟᱹ 6 ᱪᱟᱸᱫᱚ (प्लेसहोल्डर)"
     },
     "assistant": {
@@ -205,6 +206,29 @@
         "starter2": "ᱪᱮᱫ ଫର୍ଟିଲାଇଜର ᱞᱟଗାᱣ ᱨᱮᱭᱟᱜ ସମୟ ᱦᱮᱡ ᱮᱱᱟ?",
         "starter3": "ᱤᱧ ᱱᱤᱛᱚᱜ ᱚᱠᱟ ଫର୍ଟିଲାଇଜର ᱵ୍ୟବହାର ᱫᱟᱲᱮᱭᱟᱜᱼᱟ?",
         "starter4": "ᱪᱮᱫ ᱱᱟᱣᱟ ଘାସ ᱢᱮᱱᱟᱜᱼᱟ, ଯାହା ᱵᱟᱨᱮᱛᱮ ᱤᱧ ᱪିନ୍ତା କରିବା ᱫରକାର?"
+    },
+    "diseaseDetection": {
+        "title": "ଫସଲ ᱨᱚଗ ᱯᱟᱹᱨᱤᱪᱷᱟᱹ",
+        "description": "AI-संचालित ᱨᱚଗ ախտոր ᱟᱨ ଉପଚାର ᱡᱚᱡᱚᱱᱟ ᱧᱟᱢ ᱞᱟᱹᱜᱤᱫ ଫସଲ ᱨᱮᱭᱟᱜ ᱥᱟᱠାᱢ ᱨᱮᱭᱟᱜ ᱢᱤᱫ ଫଟୋ ᱟᱯᱞᱳᱰ ᱢᱮ᱾",
+        "uploadTitle": "ଫସଲ ᱨᱮᱭᱟᱜ ᱪᱤତ୍ର ᱟᱯᱞᱳᱰ ᱢᱮ",
+        "uploadDescription": "ସବୁଠାରୁ ଠିକ୍ ວິເຄາະ ᱞᱟᱹଗᱤᱫ ᱯᱨᱚଭାବିତ ଫସଲ ᱨᱮᱭᱟᱜ ᱥᱟᱠାᱢ ᱨᱮᱭᱟᱜ ᱢᱤᱫ ᱥᱟᱯᱷᱟ ଫଟୋ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+        "imageLabel": "ଫସଲ ᱨᱮᱭᱟᱜ ᱪᱤତ୍ର",
+        "buttonText": "ᱨᱚଗ ᱯᱟᱹᱨᱤᱪᱷᱟᱹ ᱢᱮ",
+        "errorNoImage": "ପ୍ରଥମେ ᱢᱤᱫ ᱪିତ୍ର ᱟᱯᱞᱳᱰ ᱢᱮ᱾",
+        "errorAnalysis": "క్షమിക്കണം, ᱪିତ୍ର ວິເຄາະ ᱨᱮ ତ୍ରୁଟି ᱦେଲା। ᱟᱨᱦᱚᱸ ଚେଷ୍ଟା ᱢᱮ᱾",
+        "errorTitle": "ତ୍ରୁଟି",
+        "resultsTitle": "ວິເຄາະ ᱨᱮᱭᱟᱜ ଫଳାଫଳ",
+        "notAPlantTitle": "ଫସଲ ᱵᱟᱝ",
+        "notAPlantDescription": "ᱟᱯᱞᱳᱰ եղած ᱪିତ୍ର ᱨᱮ କୌଣସି ଫସଲ ᱵᱟᱝ ᱧᱮᱞᱚᱜ ᱠᱟᱱᱟ। ଫସଲ ᱨᱮᱭᱟᱜ ᱢᱤᱫ ᱥᱟᱯᱷᱟ ଫଟୋ ᱟᱯᱞᱳᱰ ᱢᱮ᱾",
+        "identificationTitle": "ଫସଲ ᱨᱮᱭᱟᱜ ᱯᱟᱹᱨᱤᱪᱷᱟᱹ",
+        "commonName": "ସାଧାରଣ ନାମ",
+        "latinName": "ଲାଟିନ୍ ନାମ",
+        "diagnosisTitle": "ախտոր",
+        "healthStatus": "ସ୍ୱାସ୍ଥ୍ୟ ସ୍ଥିତି",
+        "healthy": "ସ୍ୱାସ୍ଥ୍ୟକର",
+        "unhealthy": "ଅସ୍ୱାସ୍ଥ୍ୟକର",
+        "diseaseName": "ᱨᱚଗ/କୀଟ",
+        "treatmentTitle": "ପ୍ରତିରୋଧ ᱟᱨ ଉପଚାର ᱥᱩପାରିᱥ"
     },
     "appShell": {
         "searchPlaceholder": "ଖୋᱡ...",

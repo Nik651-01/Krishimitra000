@@ -8,7 +8,8 @@
         "advisoryServices": "सलाहकार सेवा",
         "geofencing": "जियोफेंसिंग",
         "marketplace": "बाजार",
-        "aiAssistant": "एआई सहायक"
+        "aiAssistant": "एआई सहायक",
+        "diseaseDetection": "रोग पहचान"
     },
     "languageSelector": {
         "welcome": "कृषिमित्र रे स्वागतम्",
@@ -205,6 +206,29 @@
         "starter2": "का उर्वरक डालना रिया समय होबाकाना?",
         "starter3": "आमा अब कौन उर्वरक उपयोग केआ?",
         "starter4": "का कोई नया खरपतवार तना जेकर बारे में आमा चिंता केआ?"
+    },
+    "diseaseDetection": {
+        "title": "बिरि रोग पहचान",
+        "description": "एआई-संचालित रोग निदान और उपचार योजना नाम ले बिरि रिया पत्ता रिया एक फोटो अपलोड मे।",
+        "uploadTitle": "बिरि रिया चित्र अपलोड मे",
+        "uploadDescription": "सबसे सटीक विश्लेषण ले प्रभावित बिरि रिया पत्ता रिया एक स्पष्ट फोटो चयन मे।",
+        "imageLabel": "बिरि रिया चित्र",
+        "buttonText": "रोग पता लगाओ",
+        "errorNoImage": "पहले एक चित्र अपलोड मे।",
+        "errorAnalysis": "माफ मे, चित्र रिया विश्लेषण रे कोई त्रुटि होआलस। फिर से कोशिश मे।",
+        "errorTitle": "त्रुटि",
+        "resultsTitle": "विश्लेषण रिया परिणाम",
+        "notAPlantTitle": "बिरि बनो",
+        "notAPlantDescription": "अपलोड केआल चित्र रे कोई बिरि बनो दिख रहा है। बिरि रिया एक स्पष्ट फोटो अपलोड मे।",
+        "identificationTitle": "बिरि रिया पहचान",
+        "commonName": "सामान्य नाम",
+        "latinName": "लैटिन नाम",
+        "diagnosisTitle": "निदान",
+        "healthStatus": "स्वास्थ्य स्थिति",
+        "healthy": "स्वस्थ",
+        "unhealthy": "अस्वस्थ",
+        "diseaseName": "रोग/कीट",
+        "treatmentTitle": "रोकथाम और उपचार रिया सिफारिश"
     },
     "appShell": {
         "searchPlaceholder": "खोजो...",

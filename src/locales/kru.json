@@ -8,7 +8,8 @@
         "advisoryServices": "सलाहकार सेवा",
         "geofencing": "जियोफेंसिंग",
         "marketplace": "बाजार",
-        "aiAssistant": "एआई सहायक"
+        "aiAssistant": "एआई सहायक",
+        "diseaseDetection": "रोग पहचान"
     },
     "languageSelector": {
         "welcome": "कृषिमित्र में स्वागत है",
@@ -205,6 +206,29 @@
         "starter2": "का उर्वरक डालना का समय होआलस?",
         "starter3": "एना अब कौन उर्वरक उपयोग केरा सकी?",
         "starter4": "का कोई नया खरपतवार तली जेकर बारे में एना चिंता केरा सकी?"
+    },
+    "diseaseDetection": {
+        "title": "पौधा रोग पहचान",
+        "description": "एआई-संचालित रोग निदान और उपचार योजना भेटना ले पौधा का पत्ता का एक फोटो अपलोड केरा।",
+        "uploadTitle": "पौधा का चित्र अपलोड केरा",
+        "uploadDescription": "सबसे सटीक विश्लेषण ले प्रभावित पौधा का पत्ता का एक स्पष्ट फोटो चुनार।",
+        "imageLabel": "पौधे का चित्र",
+        "buttonText": "रोग का पता लगाएं",
+        "errorNoImage": "पहले एक चित्र अपलोड केरा।",
+        "errorAnalysis": "माफ केरा, चित्र का विश्लेषण करना में कोई त्रुटि होआलस। फिर से कोशिश केरा।",
+        "errorTitle": "त्रुटि",
+        "resultsTitle": "विश्लेषण का परिणाम",
+        "notAPlantTitle": "पौधा मल्ला",
+        "notAPlantDescription": "अपलोड केराल चित्र में कोई पौधा मल्ला दिख रहा है। पौधा का एक स्पष्ट फोटो अपलोड केरा।",
+        "identificationTitle": "पौधा का पहचान",
+        "commonName": "सामान्य नाम",
+        "latinName": "लैटिन नाम",
+        "diagnosisTitle": "निदान",
+        "healthStatus": "स्वास्थ्य स्थिति",
+        "healthy": "स्वस्थ",
+        "unhealthy": "अस्वस्थ",
+        "diseaseName": "रोग/कीट",
+        "treatmentTitle": "रोकथाम और उपचार का सिफारिश"
     },
     "appShell": {
         "searchPlaceholder": "खोजना...",
