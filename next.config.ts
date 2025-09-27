@@ -1,9 +1,14 @@
 
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
+
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+});
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: 'export',
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -41,9 +46,9 @@ const nextConfig: NextConfig = {
         hostname: 'api.data.gov.in',
         port: '',
         pathname: '/**',
-      }
+      },
     ],
   },
 };
 
-export default nextConfig;
+export default withPWA(nextConfig);

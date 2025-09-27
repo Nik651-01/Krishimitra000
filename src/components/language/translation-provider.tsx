@@ -9,7 +9,7 @@ type Translations = { [key: string]: string | Translations };
 
 interface TranslationContextType {
   translations: Translations;
-  t: (key: string) => string;
+  t: (key: string, options?: { [key: string]: string | number }) => string;
 }
 
 export const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
@@ -38,7 +38,7 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
     loadTranslations();
   }, [language]);
 
-  const t = (key: string): string => {
+  const t = (key: string, options?: { [key: string]: string | number }): string => {
     const keys = key.split('.');
     let result: any = translations;
     for (const k of keys) {
@@ -47,6 +47,13 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
         return key; // Return the key if translation is not found
       }
     }
+
+    if (typeof result === 'string' && options) {
+      return Object.entries(options).reduce((acc, [key, value]) => {
+        return acc.replace(`{${key}}`, String(value));
+      }, result);
+    }
+
     return typeof result === 'string' ? result : key;
   };
 

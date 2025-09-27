@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name"> Bhoomi</string>
+    <string name="title_activity_main"> Bhoomi</string>
+    <string name="package_name">com.pixelpirates.bhoomi</string>
+    <string name="custom_url_scheme">com.pixelpirates.bhoomi</string>
+</resources>

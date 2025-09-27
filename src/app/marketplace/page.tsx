@@ -147,17 +147,12 @@ export default function MarketplacePage() {
 
     const livePricesDescription = () => {
         if (!selectedState) {
-            return t('marketplace.livePricesDescriptionNoState');
+            return "Select a state to see prices.";
         }
         if (selectedDate) {
-            return t('marketplace.livePricesDescription', {
-                location: selectedDistrict || selectedState,
-                date: format(selectedDate, 'PPP')
-            });
+            return `Showing data for ${selectedDistrict || selectedState} on ${format(selectedDate, 'PPP')}`;
         }
-        return t('marketplace.livePricesDescriptionNoDate', {
-            location: selectedDistrict || selectedState
-        });
+        return `Showing data for ${selectedDistrict || selectedState} on latest available date`;
     }
 
 

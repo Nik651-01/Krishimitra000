@@ -33,24 +33,24 @@ export default function LoginPage() {
                         <Tractor className="w-8 h-8 text-primary" />
                         <h1 className="text-2xl font-bold font-headline">{t('languageSelector.welcome')}</h1>
                     </div>
-                    <CardTitle>{t('login.title', { defaultValue: 'Login to Your Account' })}</CardTitle>
-                    <CardDescription>{t('login.description', { defaultValue: 'Enter your email below to login' })}</CardDescription>
+                    <CardTitle>{t('login.title')}</CardTitle>
+                    <CardDescription>{t('login.description')}</CardDescription>
                 </CardHeader>
                 <form onSubmit={handleLogin}>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email">{t('login.emailLabel', { defaultValue: 'Email' })}</Label>
+                            <Label htmlFor="email">{t('login.emailLabel')}</Label>
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder={t('login.emailPlaceholder', { defaultValue: 'farmer@example.com' })}
+                                placeholder={t('login.emailPlaceholder')}
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="password">{t('login.passwordLabel', { defaultValue: 'Password' })}</Label>
+                            <Label htmlFor="password">{t('login.passwordLabel')}</Label>
                             <Input 
                                 id="password" 
                                 type="password" 
@@ -63,16 +63,16 @@ export default function LoginPage() {
                     <CardFooter className="flex-col gap-4">
                         <Button type="submit" className="w-full">
                             <LogIn />
-                            {t('login.loginButton', { defaultValue: 'Login with Email' })}
+                            {t('login.loginButton')}
                         </Button>
                         <div className="flex items-center w-full">
                             <Separator className="flex-1" />
-                            <span className="px-4 text-xs text-muted-foreground">{t('login.or', { defaultValue: 'OR' })}</span>
+                            <span className="px-4 text-xs text-muted-foreground">{t('login.or')}</span>
                             <Separator className="flex-1" />
                         </div>
                         <Button variant="secondary" className="w-full" onClick={loginAsGuest}>
                             <UserCheck />
-                           {t('login.guestButton', { defaultValue: 'Continue as Guest' })}
+                           {t('login.guestButton')}
                         </Button>
                     </CardFooter>
                 </form>
