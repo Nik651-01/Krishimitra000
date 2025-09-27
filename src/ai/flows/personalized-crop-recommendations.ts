@@ -53,17 +53,23 @@ const prompt = ai.definePrompt({
   name: 'personalizedCropRecommendationsPrompt',
   input: {schema: PersonalizedCropRecommendationsInputSchema},
   output: {schema: PersonalizedCropRecommendationsOutputSchema},
-  prompt: `You are an expert agricultural advisor. Based on the provided soil data, climate conditions, and farm location, recommend the most suitable crops for the farmer.
-  {{#if soilData}}
-  Soil Data: {{{soilData}}}
-  {{else}}
-  No soil data provided. You must ask the user for their soil data before you can provide a crop recommendation.
-  {{/if}}
+  prompt: `You are an expert agricultural advisor. Your task is to provide crop recommendations based on the provided data.
+
+  **IMPORTANT**: You MUST always return a valid JSON object that conforms to the output schema.
+
+  Based on the provided soil data, climate conditions, and farm location, recommend the most suitable crops for the farmer.
+  
   Climate Data: {{{climateData}}}
   Location: {{{location}}}
 
+  {{#if soilData}}
+  Soil Data: {{{soilData}}}
+  
   In addition to crop recommendations, provide actionable soil improvement tips and a planting calendar tailored to the local climate.
   Respond in the language of the location provided, if possible.
+  {{else}}
+  **CRITICAL**: No soil data was provided. You cannot give a recommendation. Instead, you MUST return a JSON object where 'recommendedCrops' contains the message 'Soil data is required to provide a crop recommendation. Please provide details on your soil’s pH, NPK values, and organic matter content.', and the other fields are empty strings.
+  {{/if}}
   `,
 });
 

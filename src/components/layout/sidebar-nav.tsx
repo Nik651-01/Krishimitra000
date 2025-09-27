@@ -3,14 +3,15 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Leaf, TestTube2, CloudSun, BookOpen, MapPin, ShoppingCart, Sparkles, Microscope } from 'lucide-react';
+import Image from 'next/image';
+import { Home, TestTube2, CloudSun, BookOpen, MapPin, ShoppingCart, Sparkles, Microscope } from 'lucide-react';
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { AssistantDialog } from '../assistant/assistant-dialog';
 import { useTranslation } from '@/hooks/use-translation';
 
 const navItems = [
     { href: '/', icon: Home, labelKey: 'nav.dashboard' },
-    { href: '/recommendations', icon: Leaf, labelKey: 'nav.cropRecommendations' },
+    { href: '/recommendations', icon: '/my-logo.png', labelKey: 'nav.cropRecommendations' },
     { href: '/soil-health', icon: TestTube2, labelKey: 'nav.soilHealth' },
     { href: '/weather', icon: CloudSun, labelKey: 'nav.weather' },
     { href: '/disease-detection', icon: Microscope, labelKey: 'nav.diseaseDetection' },
@@ -30,7 +31,11 @@ export function SidebarNav() {
                     <SidebarMenuItem key={item.labelKey}>
                         <SidebarMenuButton asChild isActive={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))}>
                             <Link href={item.href}>
-                                <item.icon />
+                                {typeof item.icon === 'string' ? (
+                                    <Image src={item.icon} alt={t(item.labelKey)} width={24} height={24} />
+                                ) : (
+                                    <item.icon />
+                                )}
                                 <span>{t(item.labelKey)}</span>
                             </Link>
                         </SidebarMenuButton>
