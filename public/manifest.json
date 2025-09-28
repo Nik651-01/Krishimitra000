@@ -3,6 +3,7 @@
     "short_name": "KrishiMitra",
     "description": "A smart agri-advisor for Indian farmers, providing weather forecasts, soil health analysis, and crop recommendations.",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
     "background_color": "#E4EFE7",
     "theme_color": "#4CAF50",
