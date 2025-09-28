@@ -7,9 +7,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Tractor, LogIn, UserCheck } from 'lucide-react';
+import { LogIn, UserCheck } from 'lucide-react';
 import { useAuthStore } from '@/lib/auth-store';
 import { useTranslation } from '@/hooks/use-translation';
+import { Logo } from '@/components/logo';
 
 export default function LoginPage() {
     const { login, loginAsGuest } = useAuthStore();
@@ -29,10 +30,7 @@ export default function LoginPage() {
         <div className="flex items-center justify-center min-h-screen bg-background p-4">
             <Card className="w-full max-w-sm">
                 <CardHeader className="text-center">
-                    <div className="flex justify-center items-center gap-2 mb-4">
-                        <Tractor className="w-8 h-8 text-primary" />
-                        <h1 className="text-2xl font-bold font-headline">{t('languageSelector.welcome')}</h1>
-                    </div>
+                    <Logo className="mb-4" />
                     <CardTitle>{t('login.title')}</CardTitle>
                     <CardDescription>{t('login.description')}</CardDescription>
                 </CardHeader>

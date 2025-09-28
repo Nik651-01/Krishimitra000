@@ -4,7 +4,7 @@ import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarInset, 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Bell, Search, Sparkles, Tractor, LogOut } from "lucide-react";
+import { Bell, Search, Sparkles, LogOut } from "lucide-react";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarNav } from "./sidebar-nav";
@@ -12,6 +12,7 @@ import { AssistantDialog } from "../assistant/assistant-dialog";
 import { useTranslation } from "@/hooks/use-translation";
 import { LanguageSwitcher } from "../language/language-switcher";
 import { useAuthStore } from "@/lib/auth-store";
+import { Logo } from "../logo";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
     const { t } = useTranslation();
@@ -22,8 +23,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Sidebar>
                 <SidebarHeader className="p-4">
                     <Link href="/" className="flex items-center gap-2">
-                        <Tractor className="w-8 h-8 text-primary" />
-                        <h1 className="text-xl font-bold font-headline">KrishiMitra</h1>
+                        <Logo />
                     </Link>
                 </SidebarHeader>
                 <SidebarContent className="p-2">
@@ -71,8 +71,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                          <SidebarTrigger className="md:hidden" />
                          <div className="md:hidden">
                             <Link href="/" className="flex items-center gap-2">
-                                <Tractor className="w-6 h-6 text-primary" />
-                                <h1 className="text-lg font-bold font-headline">KrishiMitra</h1>
+                                <Logo />
                             </Link>
                          </div>
                     </div>

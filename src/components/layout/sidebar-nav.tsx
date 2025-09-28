@@ -11,7 +11,7 @@ import { useTranslation } from '@/hooks/use-translation';
 
 const navItems = [
     { href: '/', icon: Home, labelKey: 'nav.dashboard' },
-    { href: '/recommendations', icon: '/my-logo.png', labelKey: 'nav.cropRecommendations' },
+    { href: '/recommendations', icon: Home, labelKey: 'nav.cropRecommendations' },
     { href: '/soil-health', icon: TestTube2, labelKey: 'nav.soilHealth' },
     { href: '/weather', icon: CloudSun, labelKey: 'nav.weather' },
     { href: '/disease-detection', icon: Microscope, labelKey: 'nav.diseaseDetection' },
@@ -30,7 +30,7 @@ export function SidebarNav() {
                 {navItems.map((item) => (
                     <SidebarMenuItem key={item.labelKey}>
                         <SidebarMenuButton asChild isActive={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))}>
-                            <Link href={item.href}>
+                            <Link href={item.href} className="flex items-center gap-2">
                                 {typeof item.icon === 'string' ? (
                                     <Image src={item.icon} alt={t(item.labelKey)} width={24} height={24} />
                                 ) : (
@@ -45,7 +45,7 @@ export function SidebarNav() {
             <SidebarMenu>
                  <SidebarMenuItem>
                     <AssistantDialog>
-                        <SidebarMenuButton>
+                        <SidebarMenuButton className="flex items-center gap-2">
                             <Sparkles />
                             <span>{t('nav.aiAssistant')}</span>
                         </SidebarMenuButton>
